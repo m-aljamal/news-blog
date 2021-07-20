@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id           String   @id @default(cuid())
+  title        String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  image        String
+  description  String
+  slug         String   @unique
+  category     Category @relation(fields: [categoryName], references: [name])
+  categoryName String
+  topNews      Boolean  @default(false)
+  // block        String
+  block        Block?
+
+
+  @@map("posts")
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
+
+  @@map("categories")
+}
+
+model Block {
+  id      Int    @id @default(autoincrement())
+  time    Int
+  version String
+  post    Post   @relation(fields: [postId], references: [id])
+  postId  String
+  blocks  Json
+}
