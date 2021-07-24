@@ -103,7 +103,6 @@ export default function dashboard() {
           <Editor editor={editor} />
         </form>
       </div>
-      <p>content</p>
     </div>
   );
 }

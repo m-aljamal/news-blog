@@ -11,17 +11,17 @@ import Raw from "@editorjs/raw";
 import Header from "@editorjs/header";
 import Quote from "@editorjs/quote";
 import Marker from "@editorjs/marker";
-import CheckList from "@editorjs/checklist";
+// import CheckList from "@editorjs/checklist";
 import Delimiter from "@editorjs/delimiter";
 import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
 import Paragraph from "@editorjs/paragraph";
 export default function Editor({ editor }) {
+  const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`;
+
   useEffect(() => {
     const editorJs = new EditorJS({
       holder: "editor-js",
-      autofocus: true,
-      placeholder: "نص الخبر",
       tools: {
         embed: Embed,
         table: Table,
@@ -29,15 +29,67 @@ export default function Editor({ editor }) {
         list: List,
         warning: Warning,
         code: Code,
-        linkTool: LinkTool,
+        linkTool: {
+          class: LinkTool,
+          config: {
+            endpoint: "/api/link",
+          },
+        },
         image: {
           class: Image,
-          config: {},
+          config: {
+            uploader: {
+              uploadByFile(file) {
+                return fetch("/api/cloudinary")
+                  .then(async (res) => {
+                    const { signature, timestamp } = await res.json();
+                    const formData = new FormData();
+                    formData.append("file", file);
+                    formData.append("signature", signature);
+                    formData.append("timestamp", timestamp);
+                    formData.append(
+                      "api_key",
+                      process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY ?? ""
+                    );
+                    const response = await fetch(url, {
+                      method: "POST",
+                      body: formData,
+                    });
+                    const image = await response.json();
+                    return {
+                      success: 1,
+                      file: {
+                        url: image.secure_url,
+                        public_id: image.public_id,
+                      },
+                    };
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              },
+            },
+          },
         },
         raw: Raw,
-        header: Header,
-        quote: Quote,
-        checklist: CheckList,
+        header: {
+          class: Header,
+          config: {
+            placeholder: "اكنب عنوان",
+            levels: [2, 3, 4],
+            defaultLevel: 2,
+          },
+        },
+        quote: {
+          class: Quote,
+          inlineToolbar: true,
+          shortcut: "CMD+SHIFT+O",
+          config: {
+            quotePlaceholder: "اكتب الاقتباس",
+            captionPlaceholder: "اسم الكاتب",
+          },
+        },
+        // checklist: CheckList,
         delimiter: Delimiter,
         inlineCode: InlineCode,
         simpleImage: SimpleImage,

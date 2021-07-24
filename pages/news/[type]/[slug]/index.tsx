@@ -1,7 +1,11 @@
 import React from "react";
 import { prisma } from "src/prisma";
 import NavBar from "src/components/navbar";
-
+import Paragraph from "src/components/block/Paragraph";
+import List from "src/components/block/List";
+import Iframe from "src/components/block/Iframe";
+import Image from "src/components/block/Image";
+import LinkBox from "src/components/block/LinkBox";
 export default function index({ categories, post }) {
   console.log(post);
 
@@ -58,38 +62,17 @@ export async function getStaticPaths() {
 
 const DataBlock = ({ data, type }) => {
   const blockDataByType = {
-    paragraph: <p className="text-red-800 my-4">{data.text}</p>,
+    paragraph: <Paragraph data={data} />,
     header: <h2>{data.text}</h2>,
     list: <List data={data} />,
     delimiter: <hr />,
     quote: <blockquote>{data.text}</blockquote>,
     code: <p className="bg-black text-white">{data.code}</p>,
     raw: <p className="bg-gray-600 text-red-50">{data.html}</p>,
-    embed: (
-      <div>
-        <iframe
-          width="560"
-          height="315"
-          src={data.embed}
-          frameBorder="0"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-        ></iframe>
-      </div>
-    ),
+    image: <Image data={data} />,
+    embed: <Iframe data={data} />,
+    "linkTool": <LinkBox data={data}/>
   };
 
   return <div>{blockDataByType[type]}</div>;
-};
-
-const List = ({ data }) => {
-  console.log("list is here", data);
-
-  return (
-    <ul className="ml-10 list-disc">
-      {data?.items.map((i) => (
-        <li key={i}>{i}</li>
-      ))}
-    </ul>
-  );
 };
