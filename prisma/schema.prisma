@@ -18,9 +18,10 @@ model Post {
   category     Category @relation(fields: [categoryName], references: [name])
   categoryName String
   topNews      Boolean  @default(false)
-  // block        String
   block        Block?
-
+  User         User?    @relation(fields: [userName, userEmail], references: [name, email])
+  userName     String
+  userEmail    String
 
   @@map("posts")
 }
@@ -40,4 +41,21 @@ model Block {
   post    Post   @relation(fields: [postId], references: [id])
   postId  String
   blocks  Json
+}
+
+model User {
+  role     Role   @default(AUTHOR)
+  name     String
+  email    String @unique
+  password String
+  posts    Post[]
+
+  @@id([name, email])
+}
+
+enum Role {
+  ADMINISTRATOR
+  EDITOR
+  AUTHOR
+  SUBSCRIBER
 }

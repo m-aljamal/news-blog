@@ -15,7 +15,7 @@ export default function index({ categories, post }) {
       <div>
         <p>{post?.title}</p>
         <img src={post?.image} />
-        {post.block.blocks.map((block) => (
+        {post?.block?.blocks?.map((block) => (
           <DataBlock data={block.data} type={block.type} key={block.id} />
         ))}
       </div>
@@ -71,7 +71,7 @@ const DataBlock = ({ data, type }) => {
     raw: <p className="bg-gray-600 text-red-50">{data.html}</p>,
     image: <Image data={data} />,
     embed: <Iframe data={data} />,
-    "linkTool": <LinkBox data={data}/>
+    linkTool: <LinkBox data={data} />,
   };
 
   return <div>{blockDataByType[type]}</div>;

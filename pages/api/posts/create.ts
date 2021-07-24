@@ -1,13 +1,13 @@
 import nc from "next-connect";
 import onError from "src/components/onError";
 import { prisma } from "src/prisma";
+import auth from "src/components/middleWare/auth";
 const handler = nc({
   onError,
 });
-
+handler.use(auth);
 handler.post(async (req, res) => {
   const postData = JSON.parse(req.body);
-  console.log(postData);
 
   let { title, image, description, slug, topNews, categoryName, block } =
     postData;
@@ -32,7 +32,8 @@ handler.post(async (req, res) => {
       slug,
       topNews,
       categoryName,
-      // block,
+      userName: req.user.name,
+      userEmail: req.user.email,
       block: {
         create: {
           time: block.time,
