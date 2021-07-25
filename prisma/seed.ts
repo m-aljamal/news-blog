@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "src/prisma";
 import axios from "axios";
 const getNews = async (type: string) => {
   try {
@@ -10,8 +10,6 @@ const getNews = async (type: string) => {
     return null;
   }
 };
-
-const prisma = new PrismaClient();
 
 // const addToData = (data: any, name: string) => {
 //   data.forEach(async (element: any) => {

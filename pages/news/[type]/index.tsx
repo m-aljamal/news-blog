@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { ICats } from "pages";
-import { prisma } from "src/prisma";
+import prisma from "src/prisma";
 import Link from "next/link";
 import NavBar from "src/components/navbar";
 export default function index({ posts, categories }: ICats) {

@@ -1,19 +1,15 @@
-import { prisma } from "src/prisma";
-import jwt from "jsonwebtoken";
+import { getSession } from "next-auth/client";
 export default async (req, res, next) => {
-  if (!req.cookies.token) {
-    return res.status(401).json({ error: "access not allowed" });
+  const session = await getSession({ req });
+  if (!session) {
+    return res.status(401).json({ error: "you ara not allowed" });
   }
-  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-  const user = await prisma.user.findUnique({
-    where: {
-      email: decoded.email,
-    },
-  });
-  if (!user) {
-    return res.status(401).json({ error: "User is not found" });
+  if (session.role === "USER") {
+    return res.status(401).json({ error: "user is not allowed" });
   }
-
-  req.user = user;
+  req.user = {
+    ...session.user,
+    role: session.role,
+  };
   next();
 };

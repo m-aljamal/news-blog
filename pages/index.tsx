@@ -1,6 +1,8 @@
-import { prisma } from "src/prisma";
+import prisma from "src/prisma";
 import NavBar from "src/components/navbar";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/client";
+
 export interface ICats {
   categories: ICategory[];
   posts: IPost[];
@@ -27,6 +29,8 @@ export interface IPosts {
   posts: IPost[];
 }
 export default function Home({ categories, posts }: ICats) {
+  const [session, loading] = useSession();
+
   return (
     <>
       <NavBar categories={categories} />

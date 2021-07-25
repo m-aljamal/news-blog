@@ -1,5 +1,5 @@
 import React from "react";
-import { prisma } from "src/prisma";
+import prisma from "src/prisma";
 import NavBar from "src/components/navbar";
 import Paragraph from "src/components/block/Paragraph";
 import List from "src/components/block/List";
@@ -7,8 +7,6 @@ import Iframe from "src/components/block/Iframe";
 import Image from "src/components/block/Image";
 import LinkBox from "src/components/block/LinkBox";
 export default function index({ categories, post }) {
-  console.log(post);
-
   return (
     <div>
       <NavBar categories={categories} />
