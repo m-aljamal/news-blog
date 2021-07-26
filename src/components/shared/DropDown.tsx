@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useSession, signOut } from "next-auth/client";
 import { useRouter } from "next/router";
+import Link from "next/link";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -22,7 +23,7 @@ export default function DropDown() {
           <div>
             <Menu.Button className="">
               <i
-                className="far fa-user-circle fa-lg text-gray-500"
+                className="far fa-user-circle   text-gray-500"
                 onClick={handleClick}
               ></i>
             </Menu.Button>
@@ -40,23 +41,24 @@ export default function DropDown() {
           >
             <Menu.Items
               static
-              className="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+              className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
             >
               {session && (
                 <div className="py-1">
                   <Menu.Item>
                     {({ active }) => (
-                      <a
-                        href="#"
-                        className={classNames(
-                          active
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-700",
-                          "block px-4 py-2 text-sm"
-                        )}
-                      >
-                        لوحة التحكم
-                      </a>
+                      <Link href="/dashboard">
+                        <a
+                          className={classNames(
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
+                          )}
+                        >
+                          لوحة التحكم
+                        </a>
+                      </Link>
                     )}
                   </Menu.Item>
 

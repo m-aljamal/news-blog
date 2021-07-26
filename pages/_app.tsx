@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Provider session={pageProps.session}>
         <LogoNav />
+        <hr />
         <Component {...pageProps} />
       </Provider>
     </>

@@ -10,7 +10,7 @@ export default function dashboard() {
   };
 
   return (
-    <div>
+    <div className='container'>
       <div className="flex gap-4 cursor-pointer">
         <p
           onClick={() => {

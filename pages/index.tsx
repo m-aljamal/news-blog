@@ -1,11 +1,11 @@
 import prisma from "src/prisma";
 import NavBar from "src/components/navbar";
-import Link from "next/link";
-import { signOut, useSession } from "next-auth/client";
-
+import Post from "src/components/post";
+import TopPost from "src/components/post/TopPost";
 export interface ICats {
   categories: ICategory[];
   posts: IPost[];
+  topPost: IPost;
 }
 
 interface ICategory {
@@ -28,20 +28,18 @@ interface IPost {
 export interface IPosts {
   posts: IPost[];
 }
-export default function Home({ categories, posts }: ICats) {
-  const [session, loading] = useSession();
+export default function Home({ categories, posts, topPost }: ICats) {
+  console.log(posts);
+  console.log(topPost);
 
   return (
     <>
       <NavBar categories={categories} />
-      <div>
-        <h1>All posts</h1>
-        <div className="text-red-700  ">
+      <div className="mt-5 flex gap-6 container">
+        <TopPost post={topPost} />
+        <div className="text-red-700 w-1/2">
           {posts?.map((p: IPost) => (
-            <div key={p.id}>
-              <Link href={`/news/${p.categoryName}/${p.slug}`}>{p.title}</Link>
-              <img src={p.image} />
-            </div>
+            <Post post={p} />
           ))}
         </div>
       </div>
@@ -51,8 +49,15 @@ export default function Home({ categories, posts }: ICats) {
 
 export const getStaticProps = async () => {
   const categories = await prisma.category.findMany({});
-
+  const topPost = await prisma.post.findFirst({
+    where: {
+      topNews: true,
+    },
+  });
   const posts = await prisma.post.findMany({
+    where: {
+      topNews: false,
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -62,6 +67,7 @@ export const getStaticProps = async () => {
     props: {
       categories: JSON.parse(JSON.stringify(categories)),
       posts: JSON.parse(JSON.stringify(posts)),
+      topPost: JSON.parse(JSON.stringify(topPost)),
     },
   };
 };

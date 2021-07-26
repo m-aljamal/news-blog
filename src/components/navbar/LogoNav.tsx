@@ -1,17 +1,17 @@
+import DropDown from "src/components/shared/DropDown";
+import Link from "next/link";
 export default function LogoNav() {
   return (
-    <div className="flex container justify-between items-center py-3 ">
-      <div className="">
-        <i className="far fa-newspaper fa-2x"></i>
-      </div>
-      <div>
-        <div className="bg-gray-200 rounded-md ">
-          <input
-            type="search"
-            placeholder="ابحث"
-            className="outline-none bg-gray-200 px-2 py-1 rounded-md"
-          />
-          <i className="fas fa-search px-2 text-blue-400"></i>
+    <div className="shadow-md">
+      <div className="container text-left text-3xl py-6 font-bold flex justify-between">
+        <div>
+          <span> موقع </span>
+          <span className="text-red-400">اخبار </span>
+        </div>
+        <div>
+          <div>
+            <DropDown />
+          </div>
         </div>
       </div>
     </div>

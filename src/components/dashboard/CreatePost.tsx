@@ -4,13 +4,15 @@ import dynamic from "next/dynamic";
 const Editor = dynamic(() => import("src/components/Editor"), { ssr: false });
 interface IFormData {
   title: string;
-  image: string;
+  image: FileList;
   description: string;
   slug: string;
   categoryName: string;
   topNews: boolean;
 }
-
+interface IUploadImageResponse {
+  secure_url: string;
+}
 export default function CreatePost() {
   const editor = useRef(null);
   const {
@@ -22,24 +24,56 @@ export default function CreatePost() {
     reset,
   } = useForm<IFormData>({});
 
-  const onSubmit = async (data: IFormData) => {
-    let block;
-    if (editor.current) {
-      block = await editor.current.save();
-    }
-    try {
-      const res = await fetch("/api/posts/create", {
-        method: "POST",
-        body: JSON.stringify({
-          ...data,
-          block,
-        }),
-      });
+  async function uploadImage(
+    image: File,
+    signature: string,
+    timestamp: number
+  ): Promise<IUploadImageResponse> {
+    const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`;
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("signature", signature);
+    formData.append("timestamp", timestamp.toString());
+    formData.append(
+      "api_key",
+      process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY ?? ""
+    );
 
-      // reset();
-      console.log(res);
-    } catch (error) {
-      console.log(error);
+    const response = await fetch(url, {
+      method: "post",
+      body: formData,
+    });
+    return response.json();
+  }
+  const createSignature = async () => {
+    const res = await fetch("/api/cloudinary");
+    return await res.json();
+  };
+
+  const onSubmit = async (data: IFormData) => {
+    const { signature, timestamp } = await createSignature();
+
+    if (signature) {
+      const mainImage = await uploadImage(data.image[0], signature, timestamp);
+
+      let block;
+      if (editor.current) {
+        block = await editor.current.save();
+      }
+      try {
+        const res = await fetch("/api/posts/create", {
+          method: "POST",
+          body: JSON.stringify({
+            ...data,
+            block,
+            image: mainImage.secure_url,
+          }),
+        });
+        // reset();
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -56,11 +90,13 @@ export default function CreatePost() {
           />
         </div>
         <div className="mt-5">
-          <label htmlFor="image">image url</label>
+          <label htmlFor="image">الصورة الرئيسية</label>
           <input
             id="image"
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
             {...register("image")}
-            className="border-2 border-black"
           />
         </div>
         <div className="mt-5">
