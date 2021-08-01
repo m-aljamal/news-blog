@@ -1,5 +1,7 @@
 import Post from "./index";
 export default function PostList({ postList }) {
+  console.log(postList);
+  
   return (
     <div className='container mt-4'>
       <h2>{postList.name}</h2>

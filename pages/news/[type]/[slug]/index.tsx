@@ -7,10 +7,14 @@ import Iframe from "src/components/block/Iframe";
 import BlogImage from "src/components/block/BlogImage";
 import LinkBox from "src/components/block/LinkBox";
 import Image from "next/image";
-export default function index({ categories, post }) {
+import Post from "src/components/post";
+import Share from "src/components/post/Share";
+
+export default function index({ categories, post, relatedPosts }) {
   if (!post) {
     return <p>Loading</p>;
   }
+
   return (
     <div>
       <NavBar categories={categories} />
@@ -18,9 +22,15 @@ export default function index({ categories, post }) {
         <div className="container">
           <div className="flex gap-8 ">
             <div className="bg-white w-3/4 rounded-lg">
-              <h2 className="heading cursor-default text-2xl p-6">
-                {post?.title}
-              </h2>
+              <div className="p-6">
+                <h2 className="heading cursor-default text-2xl mb-6">
+                  {post?.title}
+                </h2>
+                <div className="flex justify-between items-center">
+                  <p>{new Date(post.createdAt).toLocaleDateString()}</p>
+                  <Share />
+                </div>
+              </div>
               <Image
                 src={post?.image}
                 width={900}
@@ -40,12 +50,13 @@ export default function index({ categories, post }) {
               </div>
             </div>
             <div className="w-1/4 ">
-              <div className="bg-white sticky top-0">
-                <h2>اخبار ذات صلة</h2>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
+              <div className="sticky top-0 rounded-lg">
+                <h2 className="p-4 text-blue-500 text-xl">اقرأ ايضا</h2>
+                {relatedPosts?.map((post) => (
+                  <div className="my-4">
+                    <Post post={post} />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -73,9 +84,21 @@ export async function getStaticProps(ctx) {
       categoryName: true,
     },
   });
-
+  const relatedPosts = await prisma.post.findMany({
+    where: {
+      categoryName: ctx.params.type,
+      NOT: {
+        slug: ctx.params.slug,
+      },
+    },
+    take: 4,
+  });
   return {
-    props: { categories, post: JSON.parse(JSON.stringify(post)) },
+    props: {
+      categories,
+      post: JSON.parse(JSON.stringify(post)),
+      relatedPosts: JSON.parse(JSON.stringify(relatedPosts)),
+    },
   };
 }
 
@@ -97,7 +120,7 @@ const DataBlock = ({ data, type }) => {
     paragraph: <Paragraph data={data} />,
     header: <h2>{data.text}</h2>,
     list: <List data={data} />,
-    delimiter: <hr className='py-4'/>,
+    delimiter: <hr className="my-4" />,
     quote: <blockquote>{data.text}</blockquote>,
     code: <p className="bg-black text-white">{data.code}</p>,
     raw: <p className="bg-gray-600 text-red-50">{data.html}</p>,

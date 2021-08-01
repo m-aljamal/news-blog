@@ -18,7 +18,7 @@ const Paragraph = ({ data }) => {
 
     return (
       <div>
-        <span className="postBody text-lg py-4 inline-block">{firstPart}</span>
+        <p className="postBody text-lg py-4 inline">{firstPart}</p>
         <a
           href={linkTo}
           target="_blank"

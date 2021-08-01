@@ -109,6 +109,7 @@ export const getStaticProps = async () => {
           image: true,
           id: true,
           slug: true,
+          categoryName: true,
         },
         take: 4,
         orderBy: {
