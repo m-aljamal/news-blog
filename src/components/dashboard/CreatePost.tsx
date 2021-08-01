@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import dynamic from "next/dynamic";
+import { createSignature, uploadImage } from "../uploadImage";
 const Editor = dynamic(() => import("src/components/Editor"), { ssr: false });
 interface IFormData {
   title: string;
@@ -9,6 +10,7 @@ interface IFormData {
   slug: string;
   categoryName: string;
   topNews: boolean;
+  mostRead: boolean;
 }
 interface IUploadImageResponse {
   secure_url: string;
@@ -23,32 +25,6 @@ export default function CreatePost() {
     getValues,
     reset,
   } = useForm<IFormData>({});
-
-  async function uploadImage(
-    image: File,
-    signature: string,
-    timestamp: number
-  ): Promise<IUploadImageResponse> {
-    const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`;
-    const formData = new FormData();
-    formData.append("file", image);
-    formData.append("signature", signature);
-    formData.append("timestamp", timestamp.toString());
-    formData.append(
-      "api_key",
-      process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY ?? ""
-    );
-
-    const response = await fetch(url, {
-      method: "post",
-      body: formData,
-    });
-    return response.json();
-  }
-  const createSignature = async () => {
-    const res = await fetch("/api/cloudinary");
-    return await res.json();
-  };
 
   const onSubmit = async (data: IFormData) => {
     const { signature, timestamp } = await createSignature();
@@ -129,6 +105,15 @@ export default function CreatePost() {
             type="checkbox"
             id="topNews"
             {...register("topNews")}
+            className="border-2 border-black"
+          />
+        </div>
+        <div className="mt-5">
+          <label htmlFor="topNews">Most Read</label>
+          <input
+            type="checkbox"
+            id="mostRead"
+            {...register("mostRead")}
             className="border-2 border-black"
           />
         </div>

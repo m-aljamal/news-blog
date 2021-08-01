@@ -21,6 +21,7 @@ model Post {
   block        Block?
   userName     String
   mostRead     Boolean  @default(false)
+  important    Boolean  @default(false)
 
   @@map("posts")
 }

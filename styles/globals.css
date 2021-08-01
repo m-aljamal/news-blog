@@ -6,3 +6,9 @@
 body {
   direction: rtl;
 }
+
+.newsBox {
+  @apply bg-white rounded-lg shadow-lg;
+}
+
+ 

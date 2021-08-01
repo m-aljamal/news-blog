@@ -9,10 +9,17 @@ const handler = nc({
 handler.use(auth);
 handler.post(async (req, res) => {
   const postData = JSON.parse(req.body);
-  console.log(req.user);
 
-  let { title, image, description, slug, topNews, categoryName, block } =
-    postData;
+  let {
+    title,
+    image,
+    description,
+    slug,
+    topNews,
+    categoryName,
+    block,
+    mostRead,
+  } = postData;
   const findCategory = await prisma.category.findMany({
     where: {
       name: categoryName,
@@ -34,6 +41,7 @@ handler.post(async (req, res) => {
       slug,
       topNews,
       categoryName,
+      mostRead,
       userName: req.user.name,
       block: {
         create: {

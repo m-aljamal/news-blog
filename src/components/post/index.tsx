@@ -1,13 +1,24 @@
 import Link from "next/link";
+import Image from "next/image";
 export default function Post({ post }) {
+  const linkTo = `/news/${post.categoryName}/${post.slug}`;
   return (
-    <div className="mb-4">
-      <div key={post.id} className="flex gap-6">
-        <Link href={`/news/${post.categoryName}/${post.slug}`}>
-          <p className="w-1/2">{post.title}</p>
-        </Link>
-        <img src={post.image} className="w-1/2" />
-      </div>
+    <div className="newsBox text-center ">
+      <Link href={linkTo}>
+        <Image
+          width={250}
+          height={140}
+          src={post.image}
+          alt={post.title}
+          objectFit="cover"
+          layout="responsive"
+          quality={100}
+          className="cursor-pointer rounded-t-lg "
+        />
+      </Link>
+      <Link href={linkTo}>
+        <h2 className=" text-gray-800 text-right p-4 ">{post.title}</h2>
+      </Link>
     </div>
   );
 }

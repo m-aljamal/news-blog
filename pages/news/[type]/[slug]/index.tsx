@@ -4,15 +4,20 @@ import NavBar from "src/components/navbar";
 import Paragraph from "src/components/block/Paragraph";
 import List from "src/components/block/List";
 import Iframe from "src/components/block/Iframe";
-import Image from "src/components/block/Image";
+import BlogImage from "src/components/block/BlogImage";
 import LinkBox from "src/components/block/LinkBox";
+import Image from "next/image";
 export default function index({ categories, post }) {
+  if (!post) {
+    return <p>Loading</p>;
+  }
   return (
     <div>
       <NavBar categories={categories} />
       <div>
         <p>{post?.title}</p>
-        <img src={post?.image} />
+        <Image src={post?.image} width={800} height={500} alt={post?.title} />
+
         {post?.block?.blocks?.map((block) => (
           <DataBlock data={block.data} type={block.type} key={block.id} />
         ))}
@@ -53,7 +58,7 @@ export async function getStaticPaths() {
     };
   });
   return {
-    fallback: false,
+    fallback: true,
     paths: ids,
   };
 }
@@ -67,7 +72,7 @@ const DataBlock = ({ data, type }) => {
     quote: <blockquote>{data.text}</blockquote>,
     code: <p className="bg-black text-white">{data.code}</p>,
     raw: <p className="bg-gray-600 text-red-50">{data.html}</p>,
-    image: <Image data={data} />,
+    image: <BlogImage data={data} />,
     embed: <Iframe data={data} />,
     linkTool: <LinkBox data={data} />,
   };
