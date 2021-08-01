@@ -17,7 +17,7 @@ export default function Post({ post }) {
         />
       </Link>
       <Link href={linkTo}>
-        <h2 className=" text-gray-800 text-right p-4 ">{post.title}</h2>
+        <h2 className=" heading text-right p-4 ">{post.title}</h2>
       </Link>
     </div>
   );

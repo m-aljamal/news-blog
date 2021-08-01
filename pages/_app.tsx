@@ -12,7 +12,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <LogoNav />
         <hr />
         <Component {...pageProps} />
-        <div className='p-5'>Footer</div>
+        <div className="p-4">Footer</div>
+        
       </Provider>
     </>
   );

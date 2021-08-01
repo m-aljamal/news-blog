@@ -18,15 +18,19 @@ const Paragraph = ({ data }) => {
 
     return (
       <div>
-        <span className=" my-4">{firstPart}</span>
-        <a href={linkTo} target="_blank" className="mx-1 text-blue-800">
+        <span className="postBody text-lg py-4 inline-block">{firstPart}</span>
+        <a
+          href={linkTo}
+          target="_blank"
+          className="mx-1 text-blue-800 inline-block underline"
+        >
           {linkText}
         </a>
-        <span>{lastPart}</span>
+        <p className="postBody text-lg py-4 inline">{lastPart}</p>
       </div>
     );
   } else {
-    return <p className="text-red-800 my-4">{data.text}</p>;
+    return <p className="postBody text-lg py-4">{data.text}</p>;
   }
 };
 

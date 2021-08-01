@@ -3,13 +3,21 @@ import NavBar from "src/components/navbar";
 import Post from "src/components/post";
 import TopPost from "src/components/post/TopPost";
 import MostReadMain from "src/components/post/mostReadMain";
-import MostRead from "src/components/post/MostRead";
-import PostList from "src/components/post/latest/PostList";
+import PostList from "src/components/post/PostList";
+
+import {
+  FacebookShareButton,
+  WhatsappShareButton,
+  FacebookIcon,
+  WhatsappIcon,
+} from "react-share";
+
 export interface ICats {
   categories: ICategory[];
   importantPosts: IPost[];
   topPost: IPost;
   mostRead: IPost[];
+  posts: IPost[];
 }
 
 interface ICategory {
@@ -39,18 +47,13 @@ export default function Home({
   topPost,
   mostRead,
 }: ICats) {
-  console.log("categories", categories);
-  console.log("posts", importantPosts);
-  console.log("topPost", topPost);
-  console.log("mostRead", mostRead);
-
   return (
     <>
       <NavBar categories={categories} />
-      <div className="bg-gray-100">
-        <div className=" pt-12 flex gap-6 container ">
+      <div className="bg-gray-100 py-10">
+        <div className=" flex gap-6 container ">
           <TopPost post={topPost} />
-          <div className="  w-1/4 flex flex-col gap-4 justify-between">
+          <div className="w-1/4 flex flex-col gap-4 justify-between">
             {importantPosts?.map((p: IPost) => (
               <Post post={p} />
             ))}
@@ -63,7 +66,7 @@ export default function Home({
           </div>
           <div className="grid grid-cols-2 gap-4 ">
             {mostRead.map((post) => (
-              <MostRead post={post} />
+              <Post post={post} />
             ))}
           </div>
         </div>
@@ -71,6 +74,20 @@ export default function Home({
         {categories.map((cat) => (
           <PostList postList={cat} />
         ))}
+        {/* <div>share test</div>
+        <FacebookShareButton
+          url={"http://www.camperstribe.com"}
+          quote={"CampersTribe - World is yours to explore"}
+          hashtag="#camperstribe"
+        >
+          <FacebookIcon size={36} />
+        </FacebookShareButton>
+        <WhatsappShareButton
+          url={"https://www.npmjs.com/package/react-share"}
+          title={"شير على الوتس"}
+        >
+          <WhatsappIcon size={36} />
+        </WhatsappShareButton> */}
       </div>
     </>
   );

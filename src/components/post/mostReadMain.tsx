@@ -18,11 +18,9 @@ export default function MostReadMain({ post }) {
 
       <div className="p-5">
         <Link href={linkTo}>
-          <h2 className="mt-2 font-bold cursor-pointer text-gray-800">
-            {post.title}
-          </h2>
+          <h2 className="mt-2 heading">{post.title}</h2>
         </Link>
-        <p className="text-gray-500 mt-4 ">{post.description}</p>
+        <p className="postBody mt-4 ">{post.description}</p>
       </div>
     </div>
   );

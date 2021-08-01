@@ -1,4 +1,4 @@
-import Post from "../index";
+import Post from "./index";
 export default function PostList({ postList }) {
   return (
     <div className='container mt-4'>
