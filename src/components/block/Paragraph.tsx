@@ -22,7 +22,7 @@ const Paragraph = ({ data }) => {
         <a
           href={linkTo}
           target="_blank"
-          className="mx-1 text-blue-800 inline-block underline"
+          className="mx-1 text-blue inline-block underline"
         >
           {linkText}
         </a>

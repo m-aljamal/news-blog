@@ -4,13 +4,7 @@ import Post from "src/components/post";
 import TopPost from "src/components/post/TopPost";
 import MostReadMain from "src/components/post/mostReadMain";
 import PostList from "src/components/post/PostList";
-
-import {
-  FacebookShareButton,
-  WhatsappShareButton,
-  FacebookIcon,
-  WhatsappIcon,
-} from "react-share";
+import Head from "next/head";
 
 export interface ICats {
   categories: ICategory[];
@@ -49,45 +43,55 @@ export default function Home({
 }: ICats) {
   return (
     <>
+      <Head>
+        <title>Social Media Preview</title>
+        <meta property="og:url" content="your url" />
+        <meta property="og:type" content="website" />
+        <meta property="fb:app_id" content="your fb app id" />
+        <meta property="og:title" content="Social Media Preview Working?" />
+        <meta name="twitter:card" content="summary" />
+        <meta
+          property="og:description"
+          content="Hurray!! Yes Social Media Preview is Working"
+        />
+        <meta
+          property="og:image"
+          content={
+            "https://a2d9f143654e.ngrok.io/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fmohammadjamal%2Fimage%2Fupload%2Fv1627662526%2Fxtf39wum8tkmvix1cxit.webp&w=1920&q=75"
+          }
+        />
+      </Head>
       <NavBar categories={categories} />
       <div className="bg-gray-100 py-10">
         <div className=" flex gap-6 container ">
           <TopPost post={topPost} />
           <div className="w-1/4 flex flex-col gap-4 justify-between">
             {importantPosts?.map((p: IPost) => (
-              <Post post={p} />
+              <div key={p.id}>
+                <Post post={p} />
+              </div>
             ))}
           </div>
         </div>
-        <h2 className="container text-2xl mt-8 text-blue-500">الاكثر قراءة</h2>
+        <h2 className="container text-2xl mt-8 text-blue">الاكثر قراءة</h2>
         <div className="flex container mt-8 gap-4">
           <div className="bg-white rounded-lg shadow-lg">
             <MostReadMain post={mostRead[0]} />
           </div>
           <div className="grid grid-cols-2 gap-4 ">
             {mostRead.map((post) => (
-              <Post post={post} />
+              <div key={post.id}>
+                <Post post={post} />
+              </div>
             ))}
           </div>
         </div>
-        <h2 className="container text-2xl mt-8 text-blue-500">اخر الاخبار</h2>
+        <h2 className="container text-2xl mt-8 text-blue">اخر الاخبار</h2>
         {categories.map((cat) => (
-          <PostList postList={cat} />
+          <div key={cat.id}>
+            <PostList postList={cat} />
+          </div>
         ))}
-        {/* <div>share test</div>
-        <FacebookShareButton
-          url={"http://www.camperstribe.com"}
-          quote={"CampersTribe - World is yours to explore"}
-          hashtag="#camperstribe"
-        >
-          <FacebookIcon size={36} />
-        </FacebookShareButton>
-        <WhatsappShareButton
-          url={"https://www.npmjs.com/package/react-share"}
-          title={"شير على الوتس"}
-        >
-          <WhatsappIcon size={36} />
-        </WhatsappShareButton> */}
       </div>
     </>
   );

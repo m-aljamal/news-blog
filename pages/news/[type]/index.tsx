@@ -44,7 +44,10 @@ export default function index({ posts, categories }: ICats) {
             </div>
             <div className="w-1/2">
               {threePosts?.map((post) => (
-                <div className="flex justify-around gap-4 bg-white mb-4 rounded-lg">
+                <div
+                  key={post.id}
+                  className="flex justify-around gap-4 bg-white mb-4 rounded-lg"
+                >
                   <div className="w-3/5 p-4">
                     <Link href={`/news/${post.categoryName}/${post.slug}`}>
                       <h2 className="heading">{post.title}</h2>
@@ -69,7 +72,9 @@ export default function index({ posts, categories }: ICats) {
           </div>
           <div className="grid grid-cols-3 gap-4  mt-8">
             {restOfPosts?.map((post) => (
-              <Post post={post} />
+              <div key={post.id}>
+                <Post post={post} />
+              </div>
             ))}
           </div>
         </div>

@@ -59,9 +59,9 @@ const createPost = async () => {
 };
 async function main() {
   // await createUser();
-
+  await prisma.business.deleteMany();
   // await createCategory();
-  await createPost();
+  // await createPost();
   // await prisma.post.deleteMany();
   // await prisma.category.deleteMany();
 
@@ -77,11 +77,11 @@ async function main() {
   //     userEmail: "mom@m.com",
   //   },
   // });
-  const sports = await getNews("sports");
-  const business = await getNews("business");
-  const science = await getNews("science");
-  const health = await getNews("health");
-  const technology = await getNews("technology");
+  // const sports = await getNews("sports");
+  // const business = await getNews("business");
+  // const science = await getNews("science");
+  // const health = await getNews("health");
+  // const technology = await getNews("technology");
 
   // addToData(sports, "sports");
   // addToData(business, "business");

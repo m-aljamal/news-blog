@@ -4,13 +4,15 @@ interface IUploadImageResponse {
   public_id: string;
 }
 
-export async function uploadImage(
-  image: File,
+export async function uploadImages(
+  images: File[],
   signature: string,
   timestamp: number
 ): Promise<IUploadImageResponse> {
   const formData = new FormData();
-  formData.append("file", image);
+  for (let i = 0; i < images.length; i++) {
+    formData.append(images[i].name, images[i]);
+  }
   formData.append("signature", signature);
   formData.append("timestamp", timestamp.toString());
   formData.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY ?? "");
@@ -20,6 +22,7 @@ export async function uploadImage(
     body: formData,
   });
   return response.json();
+  return;
 }
 
 export const createSignature = async () => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { signIn, useSession } from "next-auth/client";
 import { useRouter } from "next/router";
 export default function login() {

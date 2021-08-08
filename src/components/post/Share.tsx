@@ -10,9 +10,10 @@ export default function Share() {
       <div>
         <FacebookShareButton
           url={"https://www.aljazeera.net/"}
-          quote={"CampersTribe - World is yours to explore"}
-          hashtag="#camperstribe"
-          title="الجزيرة"
+          quote={"الطاقة البديلة جيدة من حيث التكلفة والبيئة ولكن هل تنافس صناعة النفط من حيث الاقتصاد؟"}
+          hashtag="#اقتصاد"
+          title="موقع اخبار"
+          
         >
           <FacebookIcon size={30} round />
         </FacebookShareButton>

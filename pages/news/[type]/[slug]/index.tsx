@@ -9,6 +9,7 @@ import LinkBox from "src/components/block/LinkBox";
 import Image from "next/image";
 import Post from "src/components/post";
 import Share from "src/components/post/Share";
+import Head from "next/head";
 
 export default function index({ categories, post, relatedPosts }) {
   if (!post) {
@@ -17,6 +18,29 @@ export default function index({ categories, post, relatedPosts }) {
 
   return (
     <div>
+      <Head>
+        <title>Social Media Preview</title>
+
+        <meta
+          property="og:image:secure_url"
+          content="https://a2d9f143654e.ngrok.io/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fmohammadjamal%2Fimage%2Fupload%2Fv1627662526%2Fxtf39wum8tkmvix1cxit.webp&w=1920&q=75"
+        />
+        <meta property="og:url" content="your url" />
+        <meta property="og:type" content="website" />
+        <meta property="fb:app_id" content="your fb app id" />
+        <meta property="og:title" content="Social Media Preview Working?" />
+        <meta name="twitter:card" content="summary" />
+        <meta
+          property="og:description"
+          content="Hurray!! Yes Social Media Preview is Working"
+        />
+        <meta
+          property="og:image"
+          content={
+            "https://a2d9f143654e.ngrok.io/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fmohammadjamal%2Fimage%2Fupload%2Fv1627662526%2Fxtf39wum8tkmvix1cxit.webp&w=1920&q=75"
+          }
+        />
+      </Head>
       <NavBar categories={categories} />
       <div className="bg-gray-100 py-10 relative">
         <div className="container">
@@ -51,7 +75,7 @@ export default function index({ categories, post, relatedPosts }) {
             </div>
             <div className="w-1/4 ">
               <div className="sticky top-0 rounded-lg">
-                <h2 className="p-4 text-blue-500 text-xl">اقرأ ايضا</h2>
+                <h2 className="p-4 text-blue text-xl">اقرأ ايضا</h2>
                 {relatedPosts?.map((post) => (
                   <div className="my-4">
                     <Post post={post} />

@@ -7,6 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Business {
+  id                String   @id @default(cuid())
+  businessName      String
+  name              String
+  businessType      String
+  website           String
+  phone             String
+  address           String
+  coordinates       Json
+  images            Json[]
+  country           String
+  email             String
+  description       String
+  jobDescription    String
+  logo              Json
+  businessStart     String
+  NumberOfEmployees String
+  faceBook          String
+  instagram         String
+  youtube           String
+  whatsAppNumber    String
+  reviews           Review[]
+  createdAt         DateTime @default(now())
+}
+
+model Review {
+  id         String    @id @default(cuid())
+  star       Int       @default(0)
+  review     String
+  Business   Business? @relation(fields: [businessId], references: [id])
+  businessId String?
+  userName   String
+  createdAt  DateTime  @default(now())
+}
+
 model Post {
   id           String   @id @default(cuid())
   title        String
@@ -42,16 +77,6 @@ model Block {
   postId  String
   blocks  Json
 }
-
-// model User {
-//   role     Role   @default(AUTHOR)
-//   name     String
-//   email    String @unique
-//   password String
-//   posts    Post[]
-
-//   @@id([name, email])
-// }
 
 enum Role {
   ADMINISTRATOR

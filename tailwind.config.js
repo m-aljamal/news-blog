@@ -16,6 +16,9 @@ module.exports = {
           "2xl": "6rem",
         },
       },
+      colors: {
+        blue: "#009fd9",
+      },
     },
   },
   variants: {
