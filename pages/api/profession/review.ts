@@ -15,9 +15,9 @@ handler.post(async (req, res) => {
       userName: "Mohammad Aljamal",
     },
   });
-  if (findLastPreview) {
-    return res.status(401).json("لا يمكن اضافة تقييم اكثر من مرة");
-  }
+  // if (findLastPreview) {
+  //   return res.status(401).json("لا يمكن اضافة تقييم اكثر من مرة");
+  // }
   const review = await prisma.review.create({
     data: {
       userName: req.user.name,

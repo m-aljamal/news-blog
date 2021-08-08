@@ -4,9 +4,9 @@ export default async (req, res, next) => {
   if (!session) {
     return res.status(401).json({ error: "you ara not allowed" });
   }
-  if (session.role === "USER") {
-    return res.status(401).json({ error: "user is not allowed" });
-  }
+  // if (session.role === "USER") {
+  //   return res.status(401).json({ error: "user is not allowed" });
+  // }
   req.user = {
     ...session.user,
     role: session.role,

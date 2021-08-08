@@ -10,12 +10,12 @@ import Model from "src/components/shared/Model";
 import ShareBusiness from "src/components/business/ShareBusiness";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/client";
-
-export default function prof({ findBusiness }) {
-  console.log(findBusiness);
-
+import StarRate from "src/components/business/StarRate";
+export default function prof({ findBusiness, rateAvg }) {
   let [isOpen, setIsOpen] = useState(false);
   const { query } = useRouter();
+  console.log(rateAvg);
+  const avrage = Math.round(rateAvg._avg.star);
   return (
     <>
       <Head>
@@ -39,7 +39,8 @@ export default function prof({ findBusiness }) {
               </div>
               <div className="w-3/5 text-center p-4">
                 <h2>{findBusiness?.businessName}</h2>
-                <p className="my-4">Reviews</p>
+
+                <DisplayRate avrage={avrage} starCount={rateAvg._count.star} />
                 <Button
                   icon="fas fa-share-square mr-2"
                   text="مشاركة"
@@ -185,9 +186,20 @@ export async function getServerSideProps(ctx) {
       createdAt: true,
     },
   });
+  const rateAvg = await prisma.review.aggregate({
+    _avg: {
+      star: true,
+    },
+    _count: {
+      star: true,
+    },
+    where: {
+      businessId: ctx.query.id,
+    },
+  });
 
   return {
-    props: { findBusiness: JSON.parse(JSON.stringify(findBusiness)) },
+    props: { findBusiness: JSON.parse(JSON.stringify(findBusiness)), rateAvg },
   };
 }
 
@@ -262,5 +274,15 @@ const LinkWithLogo = ({ link, logo, ...props }) => {
       {props.children}
       <i className={logo}></i>
     </a>
+  );
+};
+
+const DisplayRate = ({ avrage, starCount }) => {
+  return (
+    <div className="flex justify-center items-center my-4">
+      <p className="text-gray-700 font-bold">( {starCount} )</p>
+      <StarRate value={avrage} type="preview" />
+      <p className="mr-2 text-Green font-bold">{avrage}</p>
+    </div>
   );
 };
