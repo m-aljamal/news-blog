@@ -14,7 +14,7 @@ import StarRate from "src/components/business/StarRate";
 export default function prof({ findBusiness, rateAvg }) {
   let [isOpen, setIsOpen] = useState(false);
   const { query } = useRouter();
-  console.log(rateAvg);
+  console.log(findBusiness);
   const avrage = Math.round(rateAvg._avg.star);
   return (
     <>
@@ -38,8 +38,8 @@ export default function prof({ findBusiness, rateAvg }) {
                 />
               </div>
               <div className="w-3/5 text-center p-4">
-                <h2>{findBusiness?.businessName}</h2>
-
+                <h2 className="text-lg">{findBusiness?.businessName}</h2>
+                <p className="mt-2 businessBody">{findBusiness.name}</p>
                 <DisplayRate avrage={avrage} starCount={rateAvg._count.star} />
                 <Button
                   icon="fas fa-share-square mr-2"
@@ -62,7 +62,7 @@ export default function prof({ findBusiness, rateAvg }) {
                 </span>
               </div>
               <div>
-                <div className="mt-4 flex justify-between">
+                <div className="mt-4 flex justify-around">
                   <div>
                     <h2 className="businessTitle mb-2">ملخص:</h2>
                     <p>
@@ -204,16 +204,16 @@ export async function getServerSideProps(ctx) {
 }
 
 const CustomerReviews = ({ id, reviews }) => {
-  const [session, loading] = useSession();
+  // const [session, loading] = useSession();
   let [isOpen, setIsOpen] = useState(false);
-  if (loading) {
-    return <p>Loading</p>;
-  }
-  const isUserHasReview = () => {
-    if (!loading) {
-      return reviews.some((r) => r.userName === session?.user?.name);
-    }
-  };
+  // if (loading) {
+  //   return <p>Loading</p>;
+  // }
+  // const isUserHasReview = () => {
+  //   if (!loading) {
+  //     return reviews.some((r) => r.userName === session?.user?.name);
+  //   }
+  // };
 
   return (
     <div>
@@ -277,7 +277,7 @@ const LinkWithLogo = ({ link, logo, ...props }) => {
   );
 };
 
-const DisplayRate = ({ avrage, starCount }) => {
+export const DisplayRate = ({ avrage, starCount }) => {
   return (
     <div className="flex justify-center items-center my-4">
       <p className="text-gray-700 font-bold">( {starCount} )</p>

@@ -2,6 +2,7 @@ import prisma from "src/prisma";
 import { useState } from "react";
 import Select from "src/components/Select";
 import router from "next/router";
+import Image from "next/image";
 export default function profession({ countries, businessType }) {
   const [prof, setProf] = useState("اختيار المهنة");
   const [country, setCountry] = useState("اختر البلد");
@@ -23,30 +24,19 @@ export default function profession({ countries, businessType }) {
   return (
     <div className="container">
       <div className=" mt-4">
-        <h2>ابحث عن محترفين محليين لأي شيء تقريبًا</h2>
-        <div className="flex justify-between">
-          <div className="w-1/2">
-            <Select
-              data={countries}
-              type="country"
-              selected={country}
-              setSelected={setCountry}
-            />
-          </div>
-          <div className="w-1/2">
-            <Select
-              data={filtetBusiness(country)}
-              type="businessType"
-              selected={prof}
-              setSelected={setProf}
-            />
-          </div>
-          <button
-            onClick={handleSerch}
-            className="border-2 border-gray-200 py-0 px-2 rounded-lg"
-          >
-            ابحث
-          </button>
+        <h2 className="businessTitle">
+          ابحث عن محترفين محليين لأي شيء تقريبًا
+        </h2>
+        <div className="mt-8 w-2/4">
+          <SerchForm
+            countries={countries}
+            country={country}
+            setCountry={setCountry}
+            filtetBusiness={filtetBusiness}
+            prof={prof}
+            setProf={setProf}
+            handleSerch={handleSerch}
+          />
         </div>
       </div>
     </div>
@@ -66,4 +56,41 @@ export const getStaticProps = async () => {
       businessType,
     },
   };
+};
+
+const SerchForm = ({
+  countries,
+  country,
+  setCountry,
+  filtetBusiness,
+  prof,
+  setProf,
+  handleSerch,
+}) => {
+  return (
+    <div>
+      <div>
+        <Select
+          data={countries}
+          type="country"
+          selected={country}
+          setSelected={setCountry}
+        />
+      </div>
+      <div className="mt-6">
+        <Select
+          data={filtetBusiness(country)}
+          type="businessType"
+          selected={prof}
+          setSelected={setProf}
+        />
+      </div>
+      <button
+        onClick={handleSerch}
+        className=" mt-6 rounded-lg border px-8 py-1 w-full text-white bg-blue"
+      >
+        بحث
+      </button>
+    </div>
+  );
 };

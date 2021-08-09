@@ -7,7 +7,12 @@ export default function ReviewCard({ review }) {
         <StarRate value={review.star} type="preview" />
       </div>
       <p className="businessBody">{review.review}</p>
-      <p className="businessBody mt-4">2021/08</p>
+      <p className="businessBody mt-4">
+        {new Date(review.createdAt).toLocaleDateString("ar-Sy", {
+          year: "numeric",
+          month: "long",
+        })}
+      </p>
       <hr className="my-4" />
     </div>
   );

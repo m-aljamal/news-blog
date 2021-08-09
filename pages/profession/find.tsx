@@ -2,14 +2,20 @@ import React from "react";
 import { useRouter } from "next/router";
 import prisma from "src/prisma";
 import BusinessCard from "src/components/business/BusinessCard";
+import BackLinkButton from "src/components/business/BackLinkButton";
 export default function findProfPage({ findProf }) {
   const { query } = useRouter();
 
   return (
-    <div className="mt-8  container">
-      <h2>{query.prof}:</h2>
+    <div className="mt-4  container ">
+      <BackLinkButton text="رجوع للخلف" />
+
+      <h2 className="businessTitle mt-8">
+        تم العثور على {findProf.length} شركة مختصة في
+        <span className="text-red-500"> {query.prof}</span>:
+      </h2>
       {findProf?.map((p) => (
-        <div key={p.id} className=" py-8">
+        <div key={p.id} className=" py-4">
           <BusinessCard business={p} />
         </div>
       ))}
@@ -22,6 +28,18 @@ export async function getServerSideProps(ctx) {
     where: {
       country: ctx.query.country,
       businessType: ctx.query.prof,
+    },
+    select: {
+      businessName: true,
+      id: true,
+      jobDescription: true,
+      name: true,
+      logo: true,
+      reviews: {
+        select: {
+          star: true,
+        },
+      },
     },
   });
 

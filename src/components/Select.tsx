@@ -1,4 +1,4 @@
-import { Fragment} from "react";
+import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 
 function classNames(...classes) {
@@ -33,7 +33,7 @@ const Selector = ({ data, type, selected, setSelected }) => {
                     key={prof[type]}
                     className={({ active }) =>
                       classNames(
-                        active ? "text-white bg-indigo-600" : "text-gray-900",
+                        active ? "text-white bg-indigo-600" : "text-gray-800",
                         "cursor-default select-none relative py-2 pl-3 pr-9"
                       )
                     }
