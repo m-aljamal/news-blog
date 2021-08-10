@@ -3,6 +3,7 @@ import { useState } from "react";
 import Select from "src/components/Select";
 import router from "next/router";
 import Image from "next/image";
+import LogoNav from "src/components/navbar/LogoNav";
 export default function profession({ countries, businessType }) {
   const [prof, setProf] = useState("اختيار المهنة");
   const [country, setCountry] = useState("اختر البلد");
@@ -22,24 +23,28 @@ export default function profession({ countries, businessType }) {
   };
 
   return (
-    <div className="container">
-      <div className=" mt-4">
-        <h2 className="businessTitle">
-          ابحث عن محترفين محليين لأي شيء تقريبًا
-        </h2>
-        <div className="mt-8 w-2/4">
-          <SerchForm
-            countries={countries}
-            country={country}
-            setCountry={setCountry}
-            filtetBusiness={filtetBusiness}
-            prof={prof}
-            setProf={setProf}
-            handleSerch={handleSerch}
-          />
+    <>
+      <LogoNav />
+
+      <div className="container">
+        <div className=" mt-4">
+          <h2 className="businessTitle">
+            ابحث عن محترفين محليين لأي شيء تقريبًا
+          </h2>
+          <div className="mt-8 w-2/4">
+            <SerchForm
+              countries={countries}
+              country={country}
+              setCountry={setCountry}
+              filtetBusiness={filtetBusiness}
+              prof={prof}
+              setProf={setProf}
+              handleSerch={handleSerch}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -5,7 +5,7 @@ import TopPost from "src/components/post/TopPost";
 import MostReadMain from "src/components/post/mostReadMain";
 import PostList from "src/components/post/PostList";
 import Head from "next/head";
-
+import LogoNav from "src/components/navbar/LogoNav";
 export interface ICats {
   categories: ICategory[];
   importantPosts: IPost[];
@@ -61,6 +61,7 @@ export default function Home({
           }
         />
       </Head>
+      <LogoNav />
       <NavBar categories={categories} />
       <div className="bg-gray-100 py-10">
         <div className=" flex gap-6 container ">

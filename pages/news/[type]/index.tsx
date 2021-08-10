@@ -5,6 +5,7 @@ import Link from "next/link";
 import NavBar from "src/components/navbar";
 import Post from "src/components/post";
 import Image from "next/image";
+import LogoNav from "src/components/navbar/LogoNav";
 export default function index({ posts, categories }: ICats) {
   const router = useRouter();
 
@@ -18,6 +19,7 @@ export default function index({ posts, categories }: ICats) {
 
   return (
     <div>
+      <LogoNav />
       <NavBar categories={categories} />
       <div className="bg-gray-100 py-10">
         <div className="container  ">

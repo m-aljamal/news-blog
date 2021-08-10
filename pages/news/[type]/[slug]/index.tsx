@@ -10,6 +10,7 @@ import Image from "next/image";
 import Post from "src/components/post";
 import Share from "src/components/post/Share";
 import Head from "next/head";
+import LogoNav from "src/components/navbar/LogoNav";
 
 export default function index({ categories, post, relatedPosts }) {
   if (!post) {
@@ -41,6 +42,7 @@ export default function index({ categories, post, relatedPosts }) {
           }
         />
       </Head>
+      <LogoNav />
       <NavBar categories={categories} />
       <div className="bg-gray-100 py-10 relative">
         <div className="container">
