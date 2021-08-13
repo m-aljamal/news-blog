@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-
+import { useRouter } from "next/router";
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
   return (
@@ -41,11 +41,9 @@ export default function Sidebar() {
             <div className="md:min-w-full md:hidden block pb-4 mb-4 border-b border-solid border-blueGray-200">
               <div className="flex flex-wrap">
                 <div className="w-6/12">
-                  <Link href="/">
-                    <a className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0">
-                      الخيارات لوحة التحكم
-                    </a>
-                  </Link>
+                  <p className="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0">
+                    ...الخيارات لوحة التحكم
+                  </p>
                 </div>
                 <div className="w-6/12 flex justify-end">
                   <button
@@ -60,26 +58,54 @@ export default function Sidebar() {
             </div>
 
             {/* Navigation */}
-            <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-              <li className="items-center">
-                <Link href="/dashboard">
-                  <p className="text-pink-500 hover:text-pink-600 text-xs uppercase py-3 font-bold block">
-                    <i className="fas fa-tv opacity-75 ml-2 text-sm"></i>{" "}
-                    الرئيسية
-                  </p>
-                </Link>
-              </li>
+            <ul>
+              <Nav link="/dashboard" text="الرئيسية" icon="fas fa-tv" />
             </ul>
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
             <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Documentation
+              الاخبار
             </h6>
             {/* Navigation */}
+            <ul>
+              <Nav
+                link="/dashboard/post/create"
+                text="بوست جديد"
+                icon="far fa-clipboard"
+              />
+              <Nav
+                link="/dashboard/posts"
+                text="جميع الاخبار"
+                icon="far fa-newspaper"
+              />
+            </ul>
           </div>
         </div>
       </nav>
     </>
   );
 }
+
+const Nav = ({ text, icon, link }) => {
+  const { asPath } = useRouter();
+
+  return (
+    <div>
+      <li className="items-center">
+        <Link href={link}>
+          <p
+            className={` ${
+              asPath === link
+                ? "text-pink-500"
+                : "text-gray-600 hover:text-gray-800"
+            }  cursor-pointer  text-xs uppercase py-3 font-bold block`}
+          >
+            <i className={`${icon} opacity-75 ml-2 text-base`}></i>
+            {text}
+          </p>
+        </Link>
+      </li>
+    </div>
+  );
+};
