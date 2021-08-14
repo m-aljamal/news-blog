@@ -3,7 +3,7 @@ export default function ReviewCard({ review }) {
   return (
     <div>
       <div className="flex items-center">
-        <p className="ml-2 businessTitle">{review.userName}</p>
+        <p className="ml-2 title">{review.userName}</p>
         <StarRate value={review.star} type="preview" />
       </div>
       <p className="businessBody">{review.review}</p>

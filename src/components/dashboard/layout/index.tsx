@@ -1,5 +1,5 @@
-import Sidebar from "src/components/dashboard/Sidebar";
-export default function create({ children }) {
+import Sidebar from "./Sidebar";
+export default function Layout({ children }) {
   return (
     <div>
       <Sidebar />

@@ -10,7 +10,7 @@ export default function findProfPage({ findProf }) {
     <div className="mt-4  container ">
       <BackLinkButton text="رجوع للخلف" />
 
-      <h2 className="businessTitle mt-8">
+      <h2 className="title mt-8">
         تم العثور على {findProf.length} شركة مختصة في
         <span className="text-red-500"> {query.prof}</span>:
       </h2>

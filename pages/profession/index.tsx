@@ -28,7 +28,7 @@ export default function profession({ countries, businessType }) {
 
       <div className="container">
         <div className=" mt-4">
-          <h2 className="businessTitle">
+          <h2 className="title">
             ابحث عن محترفين محليين لأي شيء تقريبًا
           </h2>
           <div className="mt-8 w-2/4">

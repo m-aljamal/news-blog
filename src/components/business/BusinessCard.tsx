@@ -17,7 +17,7 @@ export default function BusinessCard({ business }) {
         <div className="flex items-center p-4 justify-between cursor-pointer">
           <div className="w-3/4 px-4">
             <div className="flex gap-4 items-center">
-              <p className="businessTitle">{business.businessName}</p>
+              <p className="title">{business.businessName}</p>
               <DisplayRate
                 avrage={starAvrage}
                 starCount={business.reviews.length}

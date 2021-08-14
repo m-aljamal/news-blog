@@ -5,7 +5,7 @@ export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
   return (
     <>
-      <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
+      <nav className="md:left-0 bg-gray-100 border-r md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl   flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
         <div className="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto">
           {/* Toggler */}
           <button
@@ -91,15 +91,13 @@ const Nav = ({ text, icon, link }) => {
   const { asPath } = useRouter();
 
   return (
-    <div>
-      <li className="items-center">
+    <div className="bg-gray-200 my-2 rounded-md hover:bg-white">
+      <li className="items-center p-3">
         <Link href={link}>
           <p
             className={` ${
-              asPath === link
-                ? "text-pink-500"
-                : "text-gray-600 hover:text-gray-800"
-            }  cursor-pointer  text-xs uppercase py-3 font-bold block`}
+              asPath === link ? "text-pink-500" : "text-gray-600 "
+            }  cursor-pointer  text-xs uppercase font-bold block`}
           >
             <i className={`${icon} opacity-75 ml-2 text-base`}></i>
             {text}

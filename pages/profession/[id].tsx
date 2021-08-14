@@ -56,7 +56,7 @@ export default function prof({ findBusiness, rateAvg }) {
             </div>
             <div className="px-5">
               <div className="mt-5">
-                <span className="businessTitle">من نحن: </span>
+                <span className="title">من نحن: </span>
                 <span className="businessBody">
                   {findBusiness?.description}
                 </span>
@@ -64,7 +64,7 @@ export default function prof({ findBusiness, rateAvg }) {
               <div>
                 <div className="mt-4 flex justify-around">
                   <div>
-                    <h2 className="businessTitle mb-2">ملخص:</h2>
+                    <h2 className="title mb-2">ملخص:</h2>
                     <p>
                       <i className="fas fa-map-marker-alt text-blue ml-2"></i>
                       <span className="mr-3 businessBody">
@@ -85,7 +85,7 @@ export default function prof({ findBusiness, rateAvg }) {
                     </p>
                   </div>
                   <div>
-                    <h2 className="businessTitle mb-2">التواصل الاجتماعي: </h2>
+                    <h2 className="title mb-2">التواصل الاجتماعي: </h2>
                     <div className="flex gap-2 justify-center">
                       <LinkWithLogo
                         link={findBusiness.faceBook}
@@ -109,7 +109,7 @@ export default function prof({ findBusiness, rateAvg }) {
               </div>
               <div className="mt-4">
                 <hr className="my-4" />
-                <h2 className="businessTitle">مشاريع مميزة: </h2>
+                <h2 className="title">مشاريع مميزة: </h2>
                 <div className="grid grid-cols-3 gap-4 my-4">
                   {findBusiness.images?.map((i) => (
                     <div key={i.public_id}>
@@ -218,7 +218,7 @@ const CustomerReviews = ({ id, reviews }) => {
   return (
     <div>
       <div>
-        <h2 className="businessTitle">تقيمات الزبائن:</h2>
+        <h2 className="title">تقيمات الزبائن:</h2>
         <p className="mt-2 businessBody">
           يتم تصنيف العمل من حيث الجودة والاحترافية وسرعة الاستجابة
         </p>
