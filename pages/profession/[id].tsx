@@ -6,7 +6,7 @@ import Head from "next/head";
 import Image from "next/image";
 import BackLinkButton from "src/components/business/BackLinkButton";
 import { useState } from "react";
-import Model from "src/components/shared/Model";
+import Model from "src/components/layout/Model";
 import ShareBusiness from "src/components/business/ShareBusiness";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/client";

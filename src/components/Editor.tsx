@@ -110,5 +110,5 @@ export default function Editor({ editor }) {
       }
     };
   }, []);
-  return <div id="editor-js" className="w-full h-96"></div>;
+  return <div id="editor-js"></div>;
 }

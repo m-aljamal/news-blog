@@ -1,4 +1,4 @@
-import DropDown from "src/components/shared/DropDown";
+import DropDown from "src/components/layout/DropDown";
 import Link from "next/link";
 export default function LogoNav() {
   return (

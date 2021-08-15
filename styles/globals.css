@@ -37,3 +37,37 @@ body {
 .outline {
   @apply focus:outline-none focus:ring focus:border-blue rounded;
 }
+.formTitle {
+  @apply text-gray-800 font-bold mb-2;
+}
+
+#editor-js {
+  /* margin: 100px;
+  padding: 0;
+  font: 18px / 1.375 georgia, serif;
+  background: #fff;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
+  color: #444;
+
+  padding: 100px 50px; */
+
+  /* a {
+    color: royalBlue;
+    text-decoration: none;
+    border-bottom: 1px solid #eee;
+  } */
+}
+
+/* h1.ce-header {
+  font-size: 175%;
+}
+h2.ce-header {
+  text-transform: uppercase;
+  margin-top: 2em;
+  letter-spacing: 1px;
+  font-size: 90%;
+}
+.cdx-list {
+  margin-left: 0;
+  padding-left: 0;
+} */
