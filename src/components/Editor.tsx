@@ -21,6 +21,7 @@ export default function Editor({ editor }) {
 
   useEffect(() => {
     const editorJs = new EditorJS({
+      placeholder: "نص البوست",
       holder: "editor-js",
       tools: {
         embed: Embed,

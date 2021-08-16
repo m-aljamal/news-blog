@@ -1,10 +1,10 @@
 import Layout from "src/components/dashboard/layout";
 import Drop from "src/components/layout/Drop";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { ChangeEvent, useRef, useState } from "react";
 import { createSignature, uploadImage } from "src/components/uploadImage";
 import prisma from "src/prisma";
-import { PhotographIcon, CheckIcon } from "@heroicons/react/solid";
+import { PhotographIcon, CheckIcon, RewindIcon } from "@heroicons/react/solid";
 import dynamic from "next/dynamic";
 const Editor = dynamic(() => import("src/components/Editor"), { ssr: false });
 
@@ -23,6 +23,10 @@ interface IUploadImageResponse {
   secure_url: string;
 }
 export default function create({ categories }) {
+  const [ChosenCategory, setChosenCategory] = useState("");
+  const [typeOfPost, setTypeOfPost] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -35,40 +39,51 @@ export default function create({ categories }) {
       title: "عنوان الخبر",
     },
   });
+  const editor = useRef(null);
 
   const onSubmit = async (data: IFormData) => {
-    console.log(data);
+    setLoading(true);
+    const { signature, timestamp } = await createSignature();
+    if (signature) {
+      const mainImage = await uploadImage(data.image[0], signature, timestamp);
+      let block;
+      if (editor.current) {
+        block = await editor.current.save();
+      }
+      try {
+        const res = await fetch("/api/posts/create", {
+          method: "POST",
+          body: JSON.stringify({
+            ...data,
+            block,
+            image: mainImage.secure_url,
+            [`${typeOfPost}`]: true,
+            categoryName: ChosenCategory,
+          }),
+        });
 
-    // const { signature, timestamp } = await createSignature();
-
-    // if (signature) {
-    //   const mainImage = await uploadImage(data.image[0], signature, timestamp);
-
-    //   let block;
-    //   if (editor.current) {
-    //     block = await editor.current.save();
-    //   }
-    //   try {
-    //     const res = await fetch("/api/posts/create", {
-    //       method: "POST",
-    //       body: JSON.stringify({
-    //         ...data,
-    //         block,
-    //         image: mainImage.secure_url,
-    //       }),
-    //     });
-    //     // reset();
-    //     console.log(res);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
+        if (res.ok) {
+          setLoading(false);
+          setMessage("تم نشر البوست بنجاح");
+          reset();
+        } else {
+          setLoading(false);
+          const err = await res.text();
+          setMessage(err);
+        }
+      } catch (error) {
+        setLoading(false);
+        setMessage(error);
+      }
+    }
   };
+  console.log({ loading, message });
+
   return (
     <Layout>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative"
+        className="relative "
         style={{ height: "100vh" }}
       >
         <div className=" shadow-md">
@@ -80,17 +95,23 @@ export default function create({ categories }) {
           </div>
         </div>
         <div className="mt-4 p-4 flex gap-4">
-          <RightSide register={register} categories={categories} />
-          <LeftSide />
+          <RightSide
+            register={register}
+            categories={categories}
+            ChosenCategory={ChosenCategory}
+            setChosenCategory={setChosenCategory}
+            typeOfPost={typeOfPost}
+            setTypeOfPost={setTypeOfPost}
+          />
+          <LeftSide editor={editor} />
         </div>
 
-        <div className=" sticky bottom-0 left-0 right-0 border-t px-4   ">
+        <div className=" sticky bottom-0 left-0 right-0 border-t px-4 bg-white ">
           <div className="my-2 flex justify-between items-center">
             <div className="border px-4 py-1 flex items-center cursor-pointer rounded-md bg-green-500 text-white">
               <button type="submit">نشر</button>
               <CheckIcon className="h-5 w-5 mr-3" />
             </div>
-            <p className="bg-green-600">نشر</p>
           </div>
         </div>
       </form>
@@ -123,7 +144,7 @@ const ChoseImage = ({ reg }) => {
   const [previewImage, setPreviewImage] = useState<string>();
 
   return (
-    <div className="  h-60 mx-auto">
+    <div className="  h-60 mx-auto mb-4">
       <div className="bg-gray-100 h-full rounded-md">
         {previewImage && (
           <img
@@ -132,7 +153,7 @@ const ChoseImage = ({ reg }) => {
           />
         )}
       </div>
-      <div className="mt-4 py-2 shadow-md bg-gray-200 relative text-center rounded-md">
+      <div className="mt-4 py-2 shadow-md bg-gray-200 relative text-center rounded-md ">
         <span className=" ">
           اختيار الصورة
           <PhotographIcon className="h-5 w-5 mr-3 inline-block" />
@@ -167,9 +188,7 @@ export async function getStaticProps() {
   };
 }
 
-const LeftSide = () => {
-  const editor = useRef(null);
-
+const LeftSide = ({ editor }) => {
   return (
     <div
       className=" border   w-1/2   shadow-md p-3 overflow-y-auto overflow-x-auto"
@@ -180,13 +199,21 @@ const LeftSide = () => {
   );
 };
 
-const RightSide = ({ categories, register }) => {
-  const [ChosenCategory, setChosenCategory] = useState("");
-  const [typeOfPost, setTypeOfPost] = useState("");
+const RightSide = ({
+  categories,
+  register,
+  ChosenCategory,
+  setChosenCategory,
+  typeOfPost,
+  setTypeOfPost,
+}) => {
   const postType = ["topNews", "mostRead", "important"];
 
   return (
-    <div className=" border w-1/2 shadow-md p-4">
+    <div
+      className=" border w-1/2 shadow-md p-4 overflow-y-auto "
+      style={{ height: "calc(100vh - 160px)" }}
+    >
       <div className="flex flex-wrap gap-4 mb-4">
         {categories?.map((cat) => (
           <TagButton
