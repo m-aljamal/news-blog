@@ -6,6 +6,7 @@ import { createSignature, uploadImage } from "src/components/uploadImage";
 import prisma from "src/prisma";
 import { PhotographIcon, CheckIcon, RewindIcon } from "@heroicons/react/solid";
 import dynamic from "next/dynamic";
+import axios from "axios";
 const Editor = dynamic(() => import("src/components/Editor"), { ssr: false });
 
 interface IFormData {
@@ -51,33 +52,23 @@ export default function create({ categories }) {
         block = await editor.current.save();
       }
       try {
-        const res = await fetch("/api/posts/create", {
-          method: "POST",
-          body: JSON.stringify({
-            ...data,
-            block,
-            image: mainImage.secure_url,
-            [`${typeOfPost}`]: true,
-            categoryName: ChosenCategory,
-          }),
+        const res = await axios.post("/api/posts/create", {
+          ...data,
+          block,
+          image: mainImage.secure_url,
+          [`${typeOfPost}`]: true,
+          categoryName: ChosenCategory,
         });
 
-        if (res.ok) {
-          setLoading(false);
-          setMessage("تم نشر البوست بنجاح");
-          reset();
-        } else {
-          setLoading(false);
-          const err = await res.text();
-          setMessage(err);
-        }
+        console.log(res);
       } catch (error) {
+        console.log(error.response);
         setLoading(false);
         setMessage(error);
       }
     }
   };
-  console.log({ loading, message });
+  // console.log({ loading, message });
 
   return (
     <Layout>

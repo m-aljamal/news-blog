@@ -8,51 +8,55 @@ const handler = nc({
 });
 handler.use(auth);
 handler.post(async (req, res) => {
-  const postData = JSON.parse(req.body);
-
-  let {
-    title,
-    image,
-    description,
-    slug,
-    topNews,
-    categoryName,
-    block,
-    mostRead,
-  } = postData;
-  const findCategory = await prisma.category.findMany({
-    where: {
-      name: categoryName,
-    },
-  });
-
-  if (!findCategory.length) {
-    let newCategory = await prisma.category.create({
-      data: { name: categoryName },
-    });
-    categoryName = newCategory.name;
-  }
-
-  const savedPost = await prisma.post.create({
-    data: {
+  try {
+    let {
       title,
       image,
       description,
       slug,
       topNews,
       categoryName,
+      block,
       mostRead,
-      userName: req.user.name,
-      block: {
-        create: {
-          time: block.time,
-          version: block.version,
-          blocks: block.blocks,
+    } = req.body;
+    const findCategory = await prisma.category.findMany({
+      where: {
+        name: categoryName,
+      },
+    });
+
+    if (!findCategory.length) {
+      let newCategory = await prisma.category.create({
+        data: { name: categoryName },
+      });
+      categoryName = newCategory.name;
+    }
+
+    const savedPost = await prisma.post.create({
+      data: {
+        title,
+        image,
+        description,
+        slug,
+        topNews,
+        categoryName,
+        mostRead,
+        userName: req.user.name,
+        block: {
+          create: {
+            time: block.time,
+            version: block.version,
+            blocks: block.blocks,
+          },
         },
       },
-    },
-  });
-  res.json(savedPost);
+    });
+    return res.json(savedPost);
+  } catch (error) {
+    console.log(error);
+
+    return res.status(404).json(error);
+  }
 });
 
 export default handler;
