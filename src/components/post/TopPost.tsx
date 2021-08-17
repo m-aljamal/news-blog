@@ -12,8 +12,8 @@ export default function TopPost({ post }) {
           className="cursor-pointer"
           alt="Mountains"
           src={post.image}
-          width={1000}
-          height={750}
+          width={700}
+          height={450}
           layout="responsive"
         />
       </Link>

@@ -80,11 +80,15 @@ export default function Home({
             <MostReadMain post={mostRead[0]} />
           </div>
           <div className="grid grid-cols-2 gap-4 ">
-            {mostRead.map((post) => (
-              <div key={post.id}>
-                <Post post={post} />
-              </div>
-            ))}
+            {mostRead.map((post, i) => {
+              if (i > 0) {
+                return (
+                  <div key={post.id}>
+                    <Post post={post} />
+                  </div>
+                );
+              }
+            })}
           </div>
         </div>
         <h2 className="container text-2xl mt-8 text-blue">اخر الاخبار</h2>
@@ -141,11 +145,16 @@ export const getStaticProps = async () => {
     orderBy: {
       createdAt: "desc",
     },
+    take: 3,
   });
   const mostRead = await prisma.post.findMany({
     where: {
       mostRead: true,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 5,
   });
 
   return {

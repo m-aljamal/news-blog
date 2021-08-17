@@ -6,6 +6,7 @@ import NavBar from "src/components/navbar";
 import Post from "src/components/post";
 import Image from "next/image";
 import LogoNav from "src/components/navbar/LogoNav";
+import PostWithDescription from "src/components/post/PostWithDescription";
 export default function index({ posts, categories }: ICats) {
   const router = useRouter();
 
@@ -30,8 +31,8 @@ export default function index({ posts, categories }: ICats) {
                 <Image
                   src={firstPost?.image}
                   layout="responsive"
-                  width={450}
-                  height={300}
+                  width={650}
+                  height={400}
                   className="rounded-t-lg cursor-pointer"
                 />
               </Link>
@@ -39,44 +40,22 @@ export default function index({ posts, categories }: ICats) {
                 <Link
                   href={`/news/${firstPost.categoryName}/${firstPost.slug}`}
                 >
-                  <h2 className="heading ">{firstPost?.title}</h2>
+                  <h2 className="heading hover:underline text-2xl text-gray-800">
+                    {firstPost?.title}
+                  </h2>
                 </Link>
-                <p className="postBody ">{firstPost?.description}</p>
+                <p className="postBody leading-loose text-xl mt-5">{firstPost?.description}</p>
               </div>
             </div>
             <div className="w-1/2">
               {threePosts?.map((post) => (
-                <div
-                  key={post.id}
-                  className="flex justify-around gap-4 bg-white mb-4 rounded-lg"
-                >
-                  <div className="w-3/5 p-4">
-                    <Link href={`/news/${post.categoryName}/${post.slug}`}>
-                      <h2 className="heading">{post.title}</h2>
-                    </Link>
-                    <p className="postBody mt-4">{post.description}</p>
-                  </div>
-                  <div className="w-2/5">
-                    <Link href={`/news/${post.categoryName}/${post.slug}`}>
-                      <Image
-                        src={post?.image}
-                        layout="responsive"
-                        objectFit="cover"
-                        width={350}
-                        height={450}
-                        className="rounded-tl-lg rounded-bl-lg cursor-pointer"
-                      />
-                    </Link>
-                  </div>
-                </div>
+                <PostWithDescription post={post} imageW={350} imageH={450} />
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-4  mt-8">
+          <div className="mt-8">
             {restOfPosts?.map((post) => (
-              <div key={post.id}>
-                <Post post={post} />
-              </div>
+              <PostWithDescription post={post} imageW={350} imageH={250} />
             ))}
           </div>
         </div>

@@ -18,6 +18,7 @@ handler.post(async (req, res) => {
       categoryName,
       block,
       mostRead,
+      important,
     } = req.body;
     const findCategory = await prisma.category.findMany({
       where: {
@@ -41,6 +42,7 @@ handler.post(async (req, res) => {
         topNews,
         categoryName,
         mostRead,
+        important,
         userName: req.user.name,
         block: {
           create: {
@@ -51,6 +53,7 @@ handler.post(async (req, res) => {
         },
       },
     });
+
     return res.json(savedPost);
   } catch (error) {
     console.log(error);

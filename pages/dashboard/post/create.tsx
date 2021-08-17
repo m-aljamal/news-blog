@@ -1,7 +1,7 @@
 import Layout from "src/components/dashboard/layout";
 import Drop from "src/components/layout/Drop";
 import { useForm } from "react-hook-form";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { createSignature, uploadImage } from "src/components/uploadImage";
 import prisma from "src/prisma";
 import { PhotographIcon, CheckIcon, RewindIcon } from "@heroicons/react/solid";
@@ -20,14 +20,26 @@ interface IFormData {
   important: boolean;
 }
 
-interface IUploadImageResponse {
-  secure_url: string;
-}
 export default function create({ categories }) {
   const [ChosenCategory, setChosenCategory] = useState("");
   const [typeOfPost, setTypeOfPost] = useState("");
   const [message, setMessage] = useState("");
+  const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string>();
+  useEffect(() => {
+    if (!message) {
+      setVisible(false);
+      setMessage("");
+      return;
+    }
+    setVisible(true);
+    const time = setTimeout(() => {
+      setVisible(false);
+      setMessage("");
+    }, 5000);
+    return () => clearTimeout(time);
+  }, [message]);
   const {
     register,
     handleSubmit,
@@ -60,18 +72,30 @@ export default function create({ categories }) {
           categoryName: ChosenCategory,
         });
 
-        console.log(res);
+        if (res.statusText === "OK") {
+          setLoading(false);
+          setMessage("تم النشر بنجاح");
+          reset();
+          setChosenCategory("");
+          setTypeOfPost("");
+          setPreviewImage("");
+          await editor.current.clear();
+        }
       } catch (error) {
         console.log(error.response);
         setLoading(false);
-        setMessage(error);
+        setMessage("خطأ لم يتم النشر");
       }
     }
   };
-  // console.log({ loading, message });
 
   return (
     <Layout>
+      {visible && (
+        <div className=" absolute top-2 bg-gray-200 left-1/2 p-4 z-40">
+          {message}
+        </div>
+      )}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="relative "
@@ -87,6 +111,8 @@ export default function create({ categories }) {
         </div>
         <div className="mt-4 p-4 flex gap-4">
           <RightSide
+            previewImage={previewImage}
+            setPreviewImage={setPreviewImage}
             register={register}
             categories={categories}
             ChosenCategory={ChosenCategory}
@@ -99,9 +125,11 @@ export default function create({ categories }) {
 
         <div className=" sticky bottom-0 left-0 right-0 border-t px-4 bg-white ">
           <div className="my-2 flex justify-between items-center">
-            <div className="border px-4 py-1 flex items-center cursor-pointer rounded-md bg-green-500 text-white">
-              <button type="submit">نشر</button>
-              <CheckIcon className="h-5 w-5 mr-3" />
+            <div className="border   cursor-pointer rounded-md bg-green-500 text-white">
+              <button type="submit" className="px-4 py-2 ">
+                نشر
+              </button>
+              <CheckIcon className="h-5 w-5 inline-block" />
             </div>
           </div>
         </div>
@@ -131,9 +159,7 @@ const TagButton = ({ name, choose, setchoose }) => {
   );
 };
 
-const ChoseImage = ({ reg }) => {
-  const [previewImage, setPreviewImage] = useState<string>();
-
+const ChoseImage = ({ reg, previewImage, setPreviewImage }) => {
   return (
     <div className="  h-60 mx-auto mb-4">
       <div className="bg-gray-100 h-full rounded-md">
@@ -197,6 +223,8 @@ const RightSide = ({
   setChosenCategory,
   typeOfPost,
   setTypeOfPost,
+  previewImage,
+  setPreviewImage,
 }) => {
   const postType = ["topNews", "mostRead", "important"];
 
@@ -205,7 +233,12 @@ const RightSide = ({
       className=" border w-1/2 shadow-md p-4 overflow-y-auto "
       style={{ height: "calc(100vh - 160px)" }}
     >
-      <div className="flex flex-wrap gap-4 mb-4">
+      <input
+        placeholder="التصنيف"
+        className="border w-full outline p-2 text-gray-500"
+        onChange={(e) => setChosenCategory(e.target.value)}
+      />
+      <div className="flex flex-wrap gap-4 my-4">
         {categories?.map((cat) => (
           <TagButton
             name={cat.name}
@@ -246,7 +279,11 @@ const RightSide = ({
       </div>
       <div className="mt-4  ">
         <p className="formTitle">الصورة الرئيسية:</p>
-        <ChoseImage reg={{ ...register("image") }} />
+        <ChoseImage
+          reg={{ ...register("image") }}
+          previewImage={previewImage}
+          setPreviewImage={setPreviewImage}
+        />
       </div>
     </div>
   );
