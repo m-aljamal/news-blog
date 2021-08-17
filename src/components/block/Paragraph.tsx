@@ -18,7 +18,9 @@ const Paragraph = ({ data }) => {
 
     return (
       <div>
-        <p className="postBody text-lg py-4 inline">{firstPart}</p>
+        <p className="postBody text-lg py-4 inline  leading-loose">
+          {firstPart}
+        </p>
         <a
           href={linkTo}
           target="_blank"
@@ -26,11 +28,11 @@ const Paragraph = ({ data }) => {
         >
           {linkText}
         </a>
-        <p className="postBody text-lg py-4 inline">{lastPart}</p>
+        <p className="postBody text-lg py-4 inline leading-loose">{lastPart}</p>
       </div>
     );
   } else {
-    return <p className="postBody text-lg py-4">{data.text}</p>;
+    return <p className="postBody text-lg py-4 leading-loose">{data.text}</p>;
   }
 };
 

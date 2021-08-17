@@ -24,17 +24,22 @@ export default function index({ posts, categories }: ICats) {
       <NavBar categories={categories} />
       <div className="bg-gray-100 py-10">
         <div className="container  ">
-          <h2 className="text-2xl">{type}</h2>
+          <h2 onClick={() => router.back()} className="text-2xl cursor-pointer">
+            {type}
+          </h2>
+
           <div className="flex justify-around gap-6 mt-8">
             <div className="w-1/2 bg-white rounded-lg shadow-lg mb-4">
               <Link href={`/news/${firstPost.categoryName}/${firstPost.slug}`}>
-                <Image
-                  src={firstPost?.image}
-                  layout="responsive"
-                  width={650}
-                  height={400}
-                  className="rounded-t-lg cursor-pointer"
-                />
+                <div>
+                  <Image
+                    src={firstPost?.image}
+                    layout="responsive"
+                    width={650}
+                    height={400}
+                    className="rounded-t-lg cursor-pointer"
+                  />
+                </div>
               </Link>
               <div className="p-4">
                 <Link
@@ -44,18 +49,30 @@ export default function index({ posts, categories }: ICats) {
                     {firstPost?.title}
                   </h2>
                 </Link>
-                <p className="postBody leading-loose text-xl mt-5">{firstPost?.description}</p>
+                <p className="postBody leading-loose text-xl mt-5">
+                  {firstPost?.description}
+                </p>
               </div>
             </div>
             <div className="w-1/2">
               {threePosts?.map((post) => (
-                <PostWithDescription post={post} imageW={350} imageH={450} />
+                <PostWithDescription
+                  post={post}
+                  imageW={350}
+                  imageH={450}
+                  key={post.id}
+                />
               ))}
             </div>
           </div>
           <div className="mt-8">
             {restOfPosts?.map((post) => (
-              <PostWithDescription post={post} imageW={350} imageH={250} />
+              <PostWithDescription
+                post={post}
+                imageW={350}
+                imageH={250}
+                key={post.id}
+              />
             ))}
           </div>
         </div>

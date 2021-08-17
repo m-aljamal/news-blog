@@ -6,14 +6,16 @@ export default function MostReadMain({ post }) {
   return (
     <div>
       <Link href={linkTo}>
-        <Image
-          className="rounded-t-lg cursor-pointer"
-          src={post.image}
-          width={600}
-          height={350}
-          layout="responsive"
-          objectFit="cover"
-        />
+        <div>
+          <Image
+            className="rounded-t-lg cursor-pointer"
+            src={post.image}
+            width={600}
+            height={350}
+            layout="responsive"
+            objectFit="cover"
+          />
+        </div>
       </Link>
 
       <div className="p-5">

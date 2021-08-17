@@ -93,7 +93,7 @@ export default function Home({
         </div>
         <h2 className="container text-2xl mt-8 text-blue">اخر الاخبار</h2>
         {categories.map((cat) => (
-          <div key={cat.id}>
+          <div key={cat.name}>
             <PostList postList={cat} />
           </div>
         ))}

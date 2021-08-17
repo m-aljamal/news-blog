@@ -15,14 +15,16 @@ export default function PostWithDescription({ post, imageW, imageH }) {
       </div>
       <div className="w-2/5">
         <Link href={`/news/${post.categoryName}/${post.slug}`}>
-          <Image
-            src={post?.image}
-            layout="responsive"
-            objectFit="cover"
-            width={imageW}
-            height={imageH}
-            className="rounded-tl-lg rounded-bl-lg cursor-pointer"
-          />
+          <div>
+            <Image
+              src={post?.image}
+              layout="responsive"
+              objectFit="cover"
+              width={imageW}
+              height={imageH}
+              className="rounded-tl-lg rounded-bl-lg cursor-pointer"
+            />
+          </div>
         </Link>
       </div>
     </div>
