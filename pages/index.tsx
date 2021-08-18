@@ -30,6 +30,7 @@ interface IPost {
   id: string;
   slug: string;
   categoryName: string;
+  createdAt: string;
 }
 
 export interface IPosts {

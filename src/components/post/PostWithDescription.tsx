@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-export default function PostWithDescription({ post, imageW, imageH }) {
+export default function PostWithDescription({ post }) {
   return (
     <div
       key={post.id}
@@ -15,13 +15,11 @@ export default function PostWithDescription({ post, imageW, imageH }) {
       </div>
       <div className="w-2/5">
         <Link href={`/news/${post.categoryName}/${post.slug}`}>
-          <div>
+          <div className="relative h-60">
             <Image
               src={post?.image}
-              layout="responsive"
+              layout="fill"
               objectFit="cover"
-              width={imageW}
-              height={imageH}
               className="rounded-tl-lg rounded-bl-lg cursor-pointer"
             />
           </div>

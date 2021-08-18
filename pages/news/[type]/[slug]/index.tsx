@@ -1,4 +1,3 @@
-import React from "react";
 import prisma from "src/prisma";
 import NavBar from "src/components/navbar";
 import Paragraph from "src/components/block/Paragraph";
@@ -11,12 +10,15 @@ import Post from "src/components/post";
 import Share from "src/components/post/Share";
 import Head from "next/head";
 import LogoNav from "src/components/navbar/LogoNav";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import ShowDate from "src/components/layout/ShowDate";
 
 export default function index({ categories, post, relatedPosts }) {
   if (!post) {
     return <p>Loading</p>;
   }
-  console.log(post);
+  const router = useRouter();
 
   return (
     <div>
@@ -46,29 +48,35 @@ export default function index({ categories, post, relatedPosts }) {
       <NavBar categories={categories} />
       <div className="bg-gray-100 py-10 relative">
         <div className="container">
-          <div className="flex gap-8 ">
-            <div className="bg-white w-3/4 rounded-lg">
+          <Link href={`/news/${router.query.type}`}>
+            <a className="text-gray-500 text-xl hover:underline cursor-pointer">
+              {router.query.type}
+            </a>
+          </Link>
+          <div className="md:flex md:gap-8 mt-8">
+            <div className="bg-white md:w-3/4 rounded-lg">
               <div className="p-6">
-                <h2 className="heading cursor-default text-2xl mb-6">
+                <h2 className="heading cursor-default sm:text-3xl text-2xl mb-6">
                   {post?.title}
                 </h2>
-                <div className="flex justify-between items-center">
-                  <p>{new Date(post.createdAt).toLocaleDateString("en-GB")}</p>
+                <div className="sm:flex justify-between items-center">
+                  <ShowDate date={post.createdAt} />
                   <Share
                     title={post.title}
                     description={post.description}
                     categoryName={post.categoryName}
+                    slug={post.slug}
                   />
                 </div>
               </div>
-              <Image
-                src={post?.image}
-                width={900}
-                height={500}
-                alt={post?.title}
-                layout="responsive"
-                objectFit="cover"
-              />
+              <div className="relative h-[350px] md:h-[450px] xl:h-[500px]">
+                <Image
+                  src={post?.image}
+                  alt={post?.title}
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
               <div className="p-6">
                 {post?.block?.blocks?.map((block) => (
                   <DataBlock
@@ -140,7 +148,7 @@ export async function getStaticPaths() {
     };
   });
   return {
-    fallback: true,
+    fallback: false,
     paths: ids,
   };
 }
