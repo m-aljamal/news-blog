@@ -136,6 +136,16 @@ export default function create({ categories }) {
   );
 }
 
+
+const PostForm = () =>{
+  return(
+    <form>
+
+    </form>
+  )
+}
+
+
 const TagButton = ({ name, choose, setchoose }) => {
   return (
     <button
