@@ -65,27 +65,27 @@ export default function Home({
       <LogoNav />
       <NavBar categories={categories} />
       <div className="bg-gray-100 py-10">
-        <div className=" flex gap-6 container ">
+        <div className=" lg:flex gap-6 container ">
           <TopPost post={topPost} />
-          <div className="w-1/4 flex flex-col gap-4 justify-between">
+          <div className=" lg:w-1/4 sm:flex lg:flex-col gap-4 justify-between mt-8 lg:mt-0">
             {importantPosts?.map((p: IPost) => (
-              <div key={p.id}>
+              <div key={p.id} className="w-full my-10 sm:my-0">
                 <Post post={p} />
               </div>
             ))}
           </div>
         </div>
         <h2 className="container text-2xl mt-8 text-blue">الاكثر قراءة</h2>
-        <div className="flex container mt-8 gap-4">
+        <div className="sm:flex container mt-8 gap-4">
           <div className="bg-white rounded-lg shadow-lg">
             <MostReadMain post={mostRead[0]} />
           </div>
-          <div className="grid grid-cols-2 gap-4 ">
+          <div className="grid lg:grid-cols-2 gap-4 mt-4 sm:mt-0">
             {mostRead.map((post, i) => {
               if (i > 0) {
                 return (
                   <div key={post.id}>
-                    <Post post={post} />
+                    <Post post={post} style="hidden lg:block" />
                   </div>
                 );
               }

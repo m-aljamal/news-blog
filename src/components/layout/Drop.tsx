@@ -3,7 +3,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 
 export default function Example({ icon }) {
   return (
-    <div className="w-56 text-right fixed top-4">
+    <div className="  text-right">
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="text-gray-600">{icon}</Menu.Button>

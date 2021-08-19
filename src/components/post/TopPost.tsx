@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import ShowDate from "../layout/ShowDate";
 export default function TopPost({ post }) {
   const linkTo = `/news/${post.categoryName}/${post.slug}`;
   return (
-    <div className="newsBox w-3/4 ">
+    <div className="newsBox lg:w-3/4 ">
       <Link href={linkTo}>
-        <h2 className="heading mb-4 p-4">{post.title}</h2>
+        <h2 className="heading mb-4 p-4 text-2xl">{post.title}</h2>
       </Link>
       <Link href={linkTo}>
         <div>
@@ -19,8 +20,10 @@ export default function TopPost({ post }) {
           />
         </div>
       </Link>
-
-      <p className="mt-3 postBody text-base p-4">{post.description}</p>
+      <div className="mt-3 p-4">
+        <p className=" postBody text-xl mb-3 ">{post.description}</p>
+        <ShowDate date={post.createdAt} />
+      </div>
     </div>
   );
 }

@@ -26,16 +26,15 @@ export default function index({ posts, categories }: ICats) {
       <div className="bg-gray-100 py-10">
         <div className="container  ">
           <h2 className="text-gray-800 text-2xl">{type}</h2>
-          <div className="flex justify-around gap-6 mt-8">
-            <div className="w-1/2 bg-white rounded-lg shadow-lg mb-4">
+          <div className="lg:flex justify-around gap-6 mt-8">
+            <div className="lg:w-1/2 bg-white rounded-lg shadow-lg mb-4">
               <Link href={link}>
-                <div>
+                <div className="relative h-96">
                   <Image
                     src={firstPost?.image}
-                    layout="responsive"
-                    width={650}
-                    height={400}
-                    className="rounded-t-lg cursor-pointer"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-t-lg cursor-pointer "
                   />
                 </div>
               </Link>
@@ -53,15 +52,19 @@ export default function index({ posts, categories }: ICats) {
                 </div>
               </div>
             </div>
-            <div className="w-1/2">
+            <div className="lg:w-1/2">
               {threePosts?.map((post) => (
-                <PostWithDescription post={post} key={post.id} />
+                <PostWithDescription
+                  post={post}
+                  key={post.id}
+                  style="lg:mb-4 lg:my-0 my-10 "
+                />
               ))}
             </div>
           </div>
-          <div className="mt-8">
+          <div className="lg:mt-12">
             {restOfPosts?.map((post) => (
-              <PostWithDescription post={post} key={post.id} />
+              <PostWithDescription post={post} key={post.id} style="my-10" />
             ))}
           </div>
         </div>

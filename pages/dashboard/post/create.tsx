@@ -102,14 +102,12 @@ export default function create({ categories }) {
         style={{ height: "100vh" }}
       >
         <div className=" shadow-md">
-          <div className="flex justify-between p-4">
+          <div className="flex justify-between p-4 ">
             <input {...register("title")} className="outline title w-1/2" />
-            <div>
-              <Drop icon={<i className="fas fa-ellipsis-v"></i>} />
-            </div>
+            <Drop icon={<i className="fas fa-ellipsis-v text-pink-400"></i>} />
           </div>
         </div>
-        <div className="mt-4 p-4 flex gap-4">
+        <div className="mt-4 p-4 sm:flex gap-4">
           <RightSide
             previewImage={previewImage}
             setPreviewImage={setPreviewImage}
@@ -208,7 +206,7 @@ export async function getStaticProps() {
 const LeftSide = ({ editor }) => {
   return (
     <div
-      className=" border   w-1/2   shadow-md p-3 overflow-y-auto overflow-x-auto"
+      className=" border  mt-4 sm:mt-0 sm:w-1/2   shadow-md p-3 overflow-y-auto overflow-x-auto"
       style={{ height: "calc(100vh - 160px)" }}
     >
       <Editor editor={editor} />
@@ -230,7 +228,7 @@ const RightSide = ({
 
   return (
     <div
-      className=" border w-1/2 shadow-md p-4 overflow-y-auto "
+      className=" border sm:w-1/2 shadow-md p-4 overflow-y-auto "
       style={{ height: "calc(100vh - 160px)" }}
     >
       <input

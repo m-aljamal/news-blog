@@ -87,14 +87,16 @@ export default function index({ categories, post, relatedPosts }) {
                 ))}
               </div>
             </div>
-            <div className="w-1/4 ">
+            <div className="md:w-1/4 ">
               <div className="sticky top-0 rounded-lg">
                 <h2 className="p-4 text-blue text-xl">اقرأ ايضا</h2>
-                {relatedPosts?.map((post) => (
-                  <div className="my-4" key={post.id}>
-                    <Post post={post} key={post.id} />
-                  </div>
-                ))}
+                <div className="flex justify-between gap-8 md:block">
+                  {relatedPosts?.map((post) => (
+                    <div className="my-4 w-1/2 md:w-auto" key={post.id}>
+                      <Post post={post} key={post.id} />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

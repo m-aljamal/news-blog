@@ -1,26 +1,29 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-export default function PostWithDescription({ post }) {
+import ShowDate from "../layout/ShowDate";
+export default function PostWithDescription({ post, ...props }) {
   return (
     <div
       key={post.id}
-      className="flex justify-around gap-4 bg-white mb-4 rounded-lg"
+      className={`flex justify-around gap-4 bg-white  rounded-lg sm:flex-row flex-col-reverse shadow-md ${props.style}`}
     >
-      <div className="w-3/5 p-4">
+      <div className="w-full sm:w-3/5 p-4">
         <Link href={`/news/${post.categoryName}/${post.slug}`}>
           <h2 className="heading text-lg hover:underline">{post.title}</h2>
         </Link>
-        <p className="postBody mt-4 text-base">{post.description}</p>
+        <p className="postBody mt-4 text-base mb-3">{post.description}</p>
+
+        <ShowDate date={post.createdAt} />
       </div>
-      <div className="w-2/5">
+      <div className="w-full  sm:w-2/5">
         <Link href={`/news/${post.categoryName}/${post.slug}`}>
-          <div className="relative h-60">
+          <div className="relative h-[280px]">
             <Image
               src={post?.image}
               layout="fill"
               objectFit="cover"
-              className="rounded-tl-lg rounded-bl-lg cursor-pointer"
+              className="rounded-tl-lg sm:rounded-bl-lg cursor-pointer rounded-tr-lg sm:rounded-tr-none"
             />
           </div>
         </Link>
