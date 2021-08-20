@@ -16,6 +16,7 @@ export default function index({
   typeOfPost,
   setTypeOfPost,
   editor,
+  ...props
 }) {
   return (
     <form
@@ -25,11 +26,11 @@ export default function index({
     >
       <div className=" shadow-md">
         <div className="flex justify-between p-4 ">
-          <input {...register("title")} className="outline title w-1/2" />
+          <input {...register("title")} className="outline title w-4/5" />
           <Drop icon={<i className="fas fa-ellipsis-v text-pink-400"></i>} />
         </div>
       </div>
-      <div className="mt-4 p-4 sm:flex gap-4">
+      <div className="mt-1 p-4 sm:flex gap-4">
         <DescriptionSide
           previewImage={previewImage}
           setPreviewImage={setPreviewImage}
@@ -40,11 +41,11 @@ export default function index({
           typeOfPost={typeOfPost}
           setTypeOfPost={setTypeOfPost}
         />
-        <EditorSide editor={editor} />
+        <EditorSide editor={editor} block={props.block} />
       </div>
 
-      <div className=" sticky bottom-0 left-0 right-0 border-t px-4 bg-white ">
-        <div className="my-2 flex justify-between items-center">
+      <div className=" sticky z-20 bottom-0 left-0 right-0 border-t px-4 bg-white ">
+        <div className="my-2 flex justify-between items-center  ">
           <div className="border   cursor-pointer rounded-md bg-green-500 text-white">
             <button type="submit" className="px-4 py-2 ">
               نشر

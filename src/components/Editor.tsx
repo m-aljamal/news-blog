@@ -16,13 +16,14 @@ import Delimiter from "@editorjs/delimiter";
 import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
 import Paragraph from "@editorjs/paragraph";
-export default function Editor({ editor }) {
+export default function Editor({ editor, ...props }) {
   const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`;
 
   useEffect(() => {
     const editorJs = new EditorJS({
       placeholder: "نص البوست",
       holder: "editor-js",
+      data: props.block,
       tools: {
         embed: Embed,
         table: Table,
@@ -110,6 +111,6 @@ export default function Editor({ editor }) {
         }
       }
     };
-  }, []);
+  }, [props.block]);
   return <div id="editor-js"></div>;
 }

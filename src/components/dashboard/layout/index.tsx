@@ -3,7 +3,7 @@ export default function Layout({ children }) {
   return (
     <div>
       <Sidebar />
-      <div className="md:ml-64  ">{children}</div>
+      <div className="lg:mr-64  ">{children}</div>
     </div>
   );
 }
