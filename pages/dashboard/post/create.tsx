@@ -1,15 +1,11 @@
 import Layout from "src/components/dashboard/layout";
-import Drop from "src/components/layout/Drop";
 import { useForm } from "react-hook-form";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createSignature, uploadImage } from "src/components/uploadImage";
 import prisma from "src/prisma";
-import { PhotographIcon, CheckIcon, RewindIcon } from "@heroicons/react/solid";
-import dynamic from "next/dynamic";
 import axios from "axios";
-const Editor = dynamic(() => import("src/components/Editor"), { ssr: false });
-
-interface IFormData {
+import Form from "src/components/dashboard/postForm/";
+export interface IFormData {
   title: string;
   image: FileList;
   description: string;
@@ -96,115 +92,22 @@ export default function create({ categories }) {
           {message}
         </div>
       )}
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="relative "
-        style={{ height: "100vh" }}
-      >
-        <div className=" shadow-md">
-          <div className="flex justify-between p-4 ">
-            <input {...register("title")} className="outline title w-1/2" />
-            <Drop icon={<i className="fas fa-ellipsis-v text-pink-400"></i>} />
-          </div>
-        </div>
-        <div className="mt-4 p-4 sm:flex gap-4">
-          <RightSide
-            previewImage={previewImage}
-            setPreviewImage={setPreviewImage}
-            register={register}
-            categories={categories}
-            ChosenCategory={ChosenCategory}
-            setChosenCategory={setChosenCategory}
-            typeOfPost={typeOfPost}
-            setTypeOfPost={setTypeOfPost}
-          />
-          <LeftSide editor={editor} />
-        </div>
-
-        <div className=" sticky bottom-0 left-0 right-0 border-t px-4 bg-white ">
-          <div className="my-2 flex justify-between items-center">
-            <div className="border   cursor-pointer rounded-md bg-green-500 text-white">
-              <button type="submit" className="px-4 py-2 ">
-                نشر
-              </button>
-              <CheckIcon className="h-5 w-5 inline-block" />
-            </div>
-          </div>
-        </div>
-      </form>
+      <Form
+        register={register}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmit}
+        setPreviewImage={setPreviewImage}
+        previewImage={previewImage}
+        categories={categories}
+        ChosenCategory={ChosenCategory}
+        setChosenCategory={setChosenCategory}
+        typeOfPost={typeOfPost}
+        setTypeOfPost={setTypeOfPost}
+        editor={editor}
+      />
     </Layout>
   );
 }
-
-
-const PostForm = () =>{
-  return(
-    <form>
-
-    </form>
-  )
-}
-
-
-const TagButton = ({ name, choose, setchoose }) => {
-  return (
-    <button
-      type="button"
-      className={`bg-gray-100 rounded-md p-2 cursor-pointer ${
-        choose !== name ? "opacity-40" : "opacity-100"
-      }`}
-      onClick={() => {
-        if (choose === name) {
-          setchoose("");
-        }
-        if (!choose || (choose && choose !== name)) {
-          setchoose(name);
-        }
-      }}
-    >
-      # {name}
-    </button>
-  );
-};
-
-const ChoseImage = ({ reg, previewImage, setPreviewImage }) => {
-  return (
-    <div className="  h-60 mx-auto mb-4">
-      <div className="bg-gray-100 h-full rounded-md">
-        {previewImage && (
-          <img
-            src={previewImage}
-            className="w-full h-full rounded-md object-cover"
-          />
-        )}
-      </div>
-      <div className="mt-4 py-2 shadow-md bg-gray-200 relative text-center rounded-md ">
-        <span className=" ">
-          اختيار الصورة
-          <PhotographIcon className="h-5 w-5 mr-3 inline-block" />
-        </span>
-
-        <input
-          id="file"
-          type="file"
-          className="absolute top-0 right-0 opacity-0 w-full cursor-pointer "
-          accept="image/*"
-          {...reg}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            if (event?.target?.files?.[0]) {
-              const file = event.target.files[0];
-              const reader = new FileReader();
-              reader.onloadend = () => {
-                setPreviewImage(reader.result as string);
-              };
-              reader.readAsDataURL(file);
-            }
-          }}
-        />
-      </div>
-    </div>
-  );
-};
 
 export async function getStaticProps() {
   const categories = await prisma.category.findMany();
@@ -212,87 +115,3 @@ export async function getStaticProps() {
     props: { categories },
   };
 }
-
-const LeftSide = ({ editor }) => {
-  return (
-    <div
-      className=" border  mt-4 sm:mt-0 sm:w-1/2   shadow-md p-3 overflow-y-auto overflow-x-auto"
-      style={{ height: "calc(100vh - 160px)" }}
-    >
-      <Editor editor={editor} />
-    </div>
-  );
-};
-
-const RightSide = ({
-  categories,
-  register,
-  ChosenCategory,
-  setChosenCategory,
-  typeOfPost,
-  setTypeOfPost,
-  previewImage,
-  setPreviewImage,
-}) => {
-  const postType = ["topNews", "mostRead", "important"];
-
-  return (
-    <div
-      className=" border sm:w-1/2 shadow-md p-4 overflow-y-auto "
-      style={{ height: "calc(100vh - 160px)" }}
-    >
-      <input
-        placeholder="التصنيف"
-        className="border w-full outline p-2 text-gray-500"
-        onChange={(e) => setChosenCategory(e.target.value)}
-      />
-      <div className="flex flex-wrap gap-4 my-4">
-        {categories?.map((cat) => (
-          <TagButton
-            name={cat.name}
-            key={cat.id}
-            choose={ChosenCategory}
-            setchoose={setChosenCategory}
-          />
-        ))}
-      </div>
-      <div>
-        <p className="formTitle">شرح مختصر:</p>
-        <textarea
-          {...register("description")}
-          className="border w-full outline p-2 text-gray-500"
-          placeholder="شرح مختصر عن الخبر يجب ان لايزيد او ينقص عن 25 كلمة"
-        />
-      </div>
-      <div>
-        <p className="formTitle">رابط البوست:</p>
-        <input
-          {...register("slug")}
-          className="border w-full outline p-2 text-gray-500"
-          placeholder="حل-مشكلة-البطالة"
-        />
-      </div>
-      <div className="mt-4">
-        <p className="formTitle">تصنيف البوست:</p>
-        <div className="flex flex-wrap gap-4 mb-4">
-          {postType?.map((t) => (
-            <TagButton
-              name={t}
-              choose={typeOfPost}
-              setchoose={setTypeOfPost}
-              key={t}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="mt-4  ">
-        <p className="formTitle">الصورة الرئيسية:</p>
-        <ChoseImage
-          reg={{ ...register("image") }}
-          previewImage={previewImage}
-          setPreviewImage={setPreviewImage}
-        />
-      </div>
-    </div>
-  );
-};
