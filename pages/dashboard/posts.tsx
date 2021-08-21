@@ -7,6 +7,7 @@ import { IFormData } from "./post/create";
 import Form from "src/components/dashboard/postForm";
 import { SearchIcon } from "@heroicons/react/solid";
 import axios from "axios";
+import { createSignature, uploadImage } from "src/components/uploadImage";
 export default function posts({ posts, categories }) {
   const [choosePost, setChoosePost] = useState({
     title: "",
@@ -25,6 +26,7 @@ export default function posts({ posts, categories }) {
   const [typeOfPost, setTypeOfPost] = useState("");
   const [message, setMessage] = useState("");
   const [visible, setVisible] = useState(false);
+  const [visibleMessage, setVisibleMessage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>();
   const [search, setSearch] = useState("");
@@ -38,10 +40,31 @@ export default function posts({ posts, categories }) {
   } = useForm<IFormData>({
     defaultValues: {},
   });
+
+  useEffect(() => {
+    if (!message) {
+      setVisibleMessage(false);
+      setMessage("");
+      return;
+    }
+    setVisibleMessage(true);
+    const time = setTimeout(() => {
+      setVisibleMessage(false);
+      setMessage("");
+    }, 5000);
+    return () => clearTimeout(time);
+  }, [message]);
+
   const editor = useRef(null);
   const onSubmit = async (data: IFormData) => {
+    setLoading(true);
+    let mainImage = choosePost.image;
     if (data.image.length) {
-      console.log("find image");
+      const { signature, timestamp } = await createSignature();
+      if (signature) {
+        const img = await uploadImage(data.image[0], signature, timestamp);
+        mainImage = img.secure_url;
+      }
     }
 
     let block;
@@ -55,25 +78,20 @@ export default function posts({ posts, categories }) {
 
         id: choosePost.id,
 
-        image: choosePost.image,
+        image: mainImage,
         [`${typeOfPost}`]: true,
 
         categoryName: ChosenCategory,
       });
 
-      // if (res.statusText === "OK") {
-      //   setLoading(false);
-      //   setMessage("تم النشر بنجاح");
-      //   reset();
-      //   setChosenCategory("");
-      //   setTypeOfPost("");
-      //   setPreviewImage("");
-      //   await editor.current.clear();
-      // }
+      if (res.statusText === "OK") {
+        setLoading(false);
+        setMessage("تم التعديل بنجاح");
+      }
     } catch (error) {
       console.log(error.response);
       setLoading(false);
-      setMessage("خطأ لم يتم النشر");
+      setMessage("خطأ لم يتم التعديل");
     }
   };
 
@@ -95,6 +113,11 @@ export default function posts({ posts, categories }) {
 
   return (
     <Layout>
+      {visibleMessage && (
+        <div className=" absolute top-2 bg-gray-200 left-1/2 p-4 z-40">
+          {message}
+        </div>
+      )}
       <div className=" p-4">
         <div className="flex justify-between   gap-8 relative">
           <div className={`${visible && "w-1/2"} `}>
