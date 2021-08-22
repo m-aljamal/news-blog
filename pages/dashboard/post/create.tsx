@@ -1,10 +1,12 @@
 import Layout from "src/components/dashboard/layout";
 import { useForm } from "react-hook-form";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { createSignature, uploadImage } from "src/components/uploadImage";
 import prisma from "src/prisma";
 import axios from "axios";
 import Form from "src/components/dashboard/postForm/";
+import toast, { Toaster } from "react-hot-toast";
+
 export interface IFormData {
   title: string;
   image: FileList;
@@ -19,23 +21,9 @@ export interface IFormData {
 export default function create({ categories }) {
   const [ChosenCategory, setChosenCategory] = useState("");
   const [typeOfPost, setTypeOfPost] = useState("");
-  const [message, setMessage] = useState("");
-  const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>();
-  useEffect(() => {
-    if (!message) {
-      setVisible(false);
-      setMessage("");
-      return;
-    }
-    setVisible(true);
-    const time = setTimeout(() => {
-      setVisible(false);
-      setMessage("");
-    }, 5000);
-    return () => clearTimeout(time);
-  }, [message]);
+
   const {
     register,
     handleSubmit,
@@ -70,7 +58,7 @@ export default function create({ categories }) {
 
         if (res.statusText === "OK") {
           setLoading(false);
-          setMessage("تم النشر بنجاح");
+          toast.success("تم النشر بنجاح!");
           reset();
           setChosenCategory("");
           setTypeOfPost("");
@@ -79,19 +67,17 @@ export default function create({ categories }) {
         }
       } catch (error) {
         console.log(error.response);
+        toast.error("خطأ لم يتم النشر", error.response);
+
         setLoading(false);
-        setMessage("خطأ لم يتم النشر");
       }
     }
   };
 
   return (
     <Layout>
-      {visible && (
-        <div className=" absolute top-2 bg-gray-200 left-1/2 p-4 z-40">
-          {message}
-        </div>
-      )}
+      <Toaster />
+
       <Form
         register={register}
         handleSubmit={handleSubmit}

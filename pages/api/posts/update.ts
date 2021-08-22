@@ -45,13 +45,12 @@ handler.put(async (req, res) => {
         },
       },
     });
-    console.log(post);
 
-    res.json(post);
+    res.status(200).json(post);
   } catch (error) {
     console.log(error);
 
-    res.json("error");
+    res.status(404).json("error");
   }
 });
 

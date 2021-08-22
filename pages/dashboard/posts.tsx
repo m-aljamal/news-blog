@@ -4,10 +4,16 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IFormData } from "./post/create";
-import Form from "src/components/dashboard/postForm";
 import { SearchIcon } from "@heroicons/react/solid";
 import axios from "axios";
 import { createSignature, uploadImage } from "src/components/uploadImage";
+import toast, { Toaster } from "react-hot-toast";
+import { MenuItem } from "src/components/layout/Drop";
+import { TrashIcon } from "@heroicons/react/solid";
+import Model from "src/components/layout/Model";
+import dynamic from "next/dynamic";
+const Form = dynamic(() => import("src/components/dashboard/postForm"));
+
 export default function posts({ posts, categories }) {
   const [choosePost, setChoosePost] = useState({
     title: "",
@@ -21,15 +27,14 @@ export default function posts({ posts, categories }) {
     block: [],
     id: "",
   });
-
+  const [postsData, setPostsData] = useState(posts);
   const [ChosenCategory, setChosenCategory] = useState("");
   const [typeOfPost, setTypeOfPost] = useState("");
-  const [message, setMessage] = useState("");
   const [visible, setVisible] = useState(false);
-  const [visibleMessage, setVisibleMessage] = useState(false);
   const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>();
   const [search, setSearch] = useState("");
+  const [deleteModel, setDeletModel] = useState(false);
   const {
     register,
     handleSubmit,
@@ -40,20 +45,6 @@ export default function posts({ posts, categories }) {
   } = useForm<IFormData>({
     defaultValues: {},
   });
-
-  useEffect(() => {
-    if (!message) {
-      setVisibleMessage(false);
-      setMessage("");
-      return;
-    }
-    setVisibleMessage(true);
-    const time = setTimeout(() => {
-      setVisibleMessage(false);
-      setMessage("");
-    }, 5000);
-    return () => clearTimeout(time);
-  }, [message]);
 
   const editor = useRef(null);
   const onSubmit = async (data: IFormData) => {
@@ -84,14 +75,18 @@ export default function posts({ posts, categories }) {
         categoryName: ChosenCategory,
       });
 
-      if (res.statusText === "OK") {
+      if (res.status === 200) {
+        const newArray = [...postsData];
+        const index = newArray.findIndex((p) => p.id === res.data.id);
+        newArray[index] = res.data;
+        setPostsData(newArray);
         setLoading(false);
-        setMessage("تم التعديل بنجاح");
+        toast.success("تم التعديل بنجاح!");
       }
     } catch (error) {
       console.log(error.response);
+      toast.error("خطأ لم يتم التعديل", error.response);
       setLoading(false);
-      setMessage("خطأ لم يتم التعديل");
     }
   };
 
@@ -111,13 +106,37 @@ export default function posts({ posts, categories }) {
     return keys.filter((key) => post[key] === true)[0];
   };
 
+  const handleConfirm = async (postId: string) => {
+    try {
+      const res = await axios.delete(`/api/posts/${postId}`);
+      if (res.status === 200) {
+        setPostsData(postsData.filter((post) => post.id !== res.data.id));
+        setVisible(false);
+        setDeletModel(false);
+        toast.success("تم حذف البوست بنجاح!");
+      } else {
+        toast.error("خطأ في حذف البوست");
+      }
+    } catch (error) {
+      toast.error("خطأ في حذف البوست");
+    }
+  };
   return (
     <Layout>
-      {visibleMessage && (
-        <div className=" absolute top-2 bg-gray-200 left-1/2 p-4 z-40">
-          {message}
-        </div>
-      )}
+      <Toaster />
+      <Model
+        type="confirm"
+        handleConfirm={() => handleConfirm(choosePost.id)}
+        open={deleteModel}
+        setOpen={setDeletModel}
+        title="تأكيد الحذف"
+        content={
+          <div>
+            <p className="text-red-400 mb-3">هل متأكد من حذف بوست:</p>
+            <p>{choosePost.title}</p>
+          </div>
+        }
+      />
       <div className=" p-4">
         <div className="flex justify-between   gap-8 relative">
           <div className={`${visible && "w-1/2"} `}>
@@ -130,8 +149,8 @@ export default function posts({ posts, categories }) {
               />
               <SearchIcon className="h-5 w-5  text-pink-400" />
             </div>
-            {posts
-              .filter((post) => post.title.includes(search))
+            {postsData
+              ?.filter((post) => post.title.includes(search))
               .map((post) => (
                 <div
                   key={post.id}
@@ -191,6 +210,13 @@ export default function posts({ posts, categories }) {
                 typeOfPost={typeOfPost}
                 setTypeOfPost={setTypeOfPost}
                 editor={editor}
+                dropButtonItems={
+                  <MenuItem
+                    onClick={() => setDeletModel(true)}
+                    text="حذف"
+                    icon={<TrashIcon className="w-5 h-5 ml-1" />}
+                  />
+                }
               />
             )}
           </div>
