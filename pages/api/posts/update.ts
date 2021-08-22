@@ -44,6 +44,20 @@ handler.put(async (req, res) => {
           },
         },
       },
+      select: {
+        title: true,
+        block: true,
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        image: true,
+        description: true,
+        slug: true,
+        categoryName: true,
+        topNews: true,
+        mostRead: true,
+        important: true,
+      },
     });
 
     res.status(200).json(post);

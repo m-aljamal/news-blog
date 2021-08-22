@@ -3,6 +3,7 @@ import Drop from "src/components/layout/Drop";
 import DescriptionSide from "./DescriptionSide";
 import EditorSide from "./EditorSide";
 import { CheckIcon } from "@heroicons/react/solid";
+import ErrorMessageForm from "../layout/ErrorMessageForm";
 
 export default function index({
   register,
@@ -16,6 +17,7 @@ export default function index({
   typeOfPost,
   setTypeOfPost,
   editor,
+  errors,
   ...props
 }) {
   return (
@@ -26,7 +28,20 @@ export default function index({
     >
       <div className=" shadow-md">
         <div className="flex justify-between p-4 ">
-          <input {...register("title")} className="outline title w-4/5" />
+          <div className="w-4/5 ">
+            <input
+              {...register("title")}
+              className={` ${
+                errors.title?.message
+                  ? " outline focus:ring-red-500"
+                  : "outline"
+              } title w-full text-lg
+              `}
+              placeholder="عنوان الخبر"
+            />
+
+            <ErrorMessageForm text={errors.title?.message} />
+          </div>
           <Drop icon={<i className="fas fa-ellipsis-v text-pink-400"></i>}>
             {props.dropButtonItems}
           </Drop>
@@ -42,11 +57,12 @@ export default function index({
           setChosenCategory={setChosenCategory}
           typeOfPost={typeOfPost}
           setTypeOfPost={setTypeOfPost}
+          errors={errors}
         />
         <EditorSide editor={editor} block={props.block} />
       </div>
 
-      <div className=" sticky z-20 bottom-7 left-0 right-0 border-t px-4 bg-white ">
+      <div className=" sticky z-20   bottom-0 left-0 right-0 border-t px-4 bg-white ">
         <div className="my-2 flex justify-between items-center  ">
           <div className="border   cursor-pointer rounded-md bg-green-500 text-white">
             <button type="submit" className="px-4 py-2 ">

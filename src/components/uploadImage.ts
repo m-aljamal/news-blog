@@ -19,6 +19,7 @@ export async function uploadImage(
     method: "post",
     body: formData,
   });
+
   return response.json();
 }
 

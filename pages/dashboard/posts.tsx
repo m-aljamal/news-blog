@@ -3,15 +3,16 @@ import prisma from "src/prisma";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { IFormData } from "./post/create";
+import { IFormData, validationSchema } from "./post/create";
 import { SearchIcon } from "@heroicons/react/solid";
 import axios from "axios";
-import { createSignature, uploadImage } from "src/components/uploadImage";
 import toast, { Toaster } from "react-hot-toast";
 import { MenuItem } from "src/components/layout/Drop";
 import { TrashIcon } from "@heroicons/react/solid";
 import Model from "src/components/layout/Model";
 import dynamic from "next/dynamic";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 const Form = dynamic(() => import("src/components/dashboard/postForm"));
 
 export default function posts({ posts, categories }) {
@@ -42,21 +43,16 @@ export default function posts({ posts, categories }) {
     formState: { errors },
     getValues,
     reset,
+    clearErrors,
   } = useForm<IFormData>({
-    defaultValues: {},
+    resolver: yupResolver(validationSchema),
   });
-
+  setValue("categoryName", ChosenCategory);
+  setValue("image", previewImage);
   const editor = useRef(null);
+
   const onSubmit = async (data: IFormData) => {
     setLoading(true);
-    let mainImage = choosePost.image;
-    if (data.image.length) {
-      const { signature, timestamp } = await createSignature();
-      if (signature) {
-        const img = await uploadImage(data.image[0], signature, timestamp);
-        mainImage = img.secure_url;
-      }
-    }
 
     let block;
     if (editor.current) {
@@ -66,13 +62,8 @@ export default function posts({ posts, categories }) {
       const res = await axios.put("/api/posts/update", {
         ...data,
         block,
-
         id: choosePost.id,
-
-        image: mainImage,
         [`${typeOfPost}`]: true,
-
-        categoryName: ChosenCategory,
       });
 
       if (res.status === 200) {
@@ -98,6 +89,11 @@ export default function posts({ posts, categories }) {
     findPostType(choosePost);
     setPreviewImage(choosePost.image);
     setChosenCategory(choosePost.categoryName);
+    clearErrors("title");
+    clearErrors("categoryName");
+    clearErrors("description");
+    clearErrors("slug");
+    clearErrors("image");
   }, [choosePost]);
 
   const findPostType = (post) => {
@@ -198,6 +194,7 @@ export default function posts({ posts, categories }) {
           >
             {visible && (
               <Form
+                errors={errors}
                 block={choosePost.block}
                 register={register}
                 handleSubmit={handleSubmit}

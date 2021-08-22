@@ -35,7 +35,7 @@ body {
   @apply border-2 px-4 py-1 text-gray-500 border-gray-500 rounded-md w-1/2 text-center;
 }
 .outline {
-  @apply focus:outline-none focus:ring focus:border-blue rounded;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue rounded;
 }
 .formTitle {
   @apply text-gray-800 font-bold mb-2;

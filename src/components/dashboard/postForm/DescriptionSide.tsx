@@ -1,5 +1,6 @@
 import TagButton from "./TagButton";
 import ChoseImage from "./ChoseImage";
+import ErrorMessageForm from "../layout/ErrorMessageForm";
 const DescriptionSide = ({
   categories,
   register,
@@ -9,6 +10,7 @@ const DescriptionSide = ({
   setTypeOfPost,
   previewImage,
   setPreviewImage,
+  errors,
 }) => {
   const postType = ["topNews", "mostRead", "important"];
 
@@ -17,34 +19,55 @@ const DescriptionSide = ({
       className=" border sm:w-1/2 shadow-md p-4 overflow-y-auto "
       style={{ height: "calc(100vh - 160px)" }}
     >
-      <input
-        placeholder="التصنيف"
-        className="border w-full outline p-2 text-gray-500"
-        onChange={(e) => setChosenCategory(e.target.value)}
-      />
-      <div className="flex flex-wrap gap-4 my-4">
-        {categories?.map((cat) => (
-          <TagButton
-            name={cat.name}
-            key={cat.id}
-            choose={ChosenCategory}
-            setchoose={setChosenCategory}
-          />
-        ))}
-      </div>
       <div>
-        <p className="formTitle">شرح مختصر:</p>
+        <InputTitleWithError
+          title="تصنيف البوست:"
+          error={errors.categoryName?.message}
+        />
+        <div className="flex flex-wrap gap-4 my-2 ">
+          {categories?.map((cat) => (
+            <TagButton
+              name={cat.name}
+              key={cat.id}
+              choose={ChosenCategory}
+              setchoose={setChosenCategory}
+            />
+          ))}
+        </div>
+        <input
+          placeholder="سياسة"
+          className="border w-full outline p-2 text-gray-500"
+          onChange={(e) => setChosenCategory(e.target.value)}
+        />
+      </div>
+
+      <div className="mt-2">
+        <InputTitleWithError
+          title="شرح مختصر:"
+          error={errors.description?.message}
+        />
+        <p className="formTitle"></p>
         <textarea
           {...register("description")}
-          className="border w-full outline p-2 text-gray-500"
+          className={`border w-full ${
+            errors.description?.message
+              ? " outline focus:ring-red-500"
+              : "outline"
+          }  p-2 text-gray-500 text-sm`}
           placeholder="شرح مختصر عن الخبر يجب ان لايزيد او ينقص عن 25 كلمة"
         />
       </div>
       <div>
-        <p className="formTitle">رابط البوست:</p>
+        <InputTitleWithError
+          title="رابط البوست:"
+          error={errors.slug?.message}
+        />
+
         <input
           {...register("slug")}
-          className="border w-full outline p-2 text-gray-500"
+          className={`border w-full ${
+            errors.slug?.message ? " outline focus:ring-red-500" : "outline"
+          } p-2 text-gray-500 text-sm`}
           placeholder="حل-مشكلة-البطالة"
         />
       </div>
@@ -62,9 +85,12 @@ const DescriptionSide = ({
         </div>
       </div>
       <div className="mt-4  ">
-        <p className="formTitle">الصورة الرئيسية:</p>
+        <InputTitleWithError
+          title="الصورة الرئيسية:"
+          error={errors.image?.message}
+        />
         <ChoseImage
-          reg={{ ...register("image") }}
+          error={errors.image?.message}
           previewImage={previewImage}
           setPreviewImage={setPreviewImage}
         />
@@ -74,3 +100,12 @@ const DescriptionSide = ({
 };
 
 export default DescriptionSide;
+
+const InputTitleWithError = ({ error, title }) => {
+  return (
+    <div className="flex">
+      <p className="formTitle">{title}</p>
+      <ErrorMessageForm text={error} />
+    </div>
+  );
+};
