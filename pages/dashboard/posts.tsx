@@ -18,7 +18,7 @@ const Form = dynamic(() => import("src/components/dashboard/postForm"));
 export default function posts({ posts, categories }) {
   const [choosePost, setChoosePost] = useState({
     title: "",
-    image: "",
+    image: { secure_url: "", public_id: "" },
     description: "",
     slug: "",
     categoryName: "",
@@ -33,7 +33,10 @@ export default function posts({ posts, categories }) {
   const [typeOfPost, setTypeOfPost] = useState("");
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [previewImage, setPreviewImage] = useState<string>();
+  const [previewImage, setPreviewImage] = useState({
+    secure_url: "",
+    public_id: "",
+  });
   const [search, setSearch] = useState("");
   const [deleteModel, setDeletModel] = useState(false);
   const {
@@ -177,7 +180,7 @@ export default function posts({ posts, categories }) {
                   </div>
                   <div className="w-1/4 relative hidden sm:inline-block">
                     <Image
-                      src={post.image}
+                      src={post.image.secure_url}
                       layout="fill"
                       objectFit="cover"
                       className="rounded-tl-md rounded-bl-md"

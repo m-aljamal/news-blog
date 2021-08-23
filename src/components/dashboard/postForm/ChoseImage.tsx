@@ -1,21 +1,16 @@
 import { ChangeEvent, useState } from "react";
 import { PhotographIcon } from "@heroicons/react/solid";
 import { createSignature, uploadImage } from "src/components/uploadImage";
-import { deleteImage } from "src/components/deleteImage";
+import axios from "axios";
 
 const ChoseImage = ({ previewImage, setPreviewImage, ...props }) => {
   const [loading, setLoading] = useState(false);
   const deleteLastImage = async () => {
-    const { signature, timestamp } = await createSignature();
-    if (signature) {
-      const deleteImg = await deleteImage(
-        "yagbasmo0o22rxnu951g",
-        signature,
-        timestamp
-      );
-      console.log(deleteImg);
-    }
+    await axios.post("/api/cloudinary/delete", {
+      imgId: "bkqqmxv3ueji9vkk8oap",
+    });
   };
+
   return (
     <div className="  h-60 mx-auto mb-16">
       <div
@@ -31,9 +26,9 @@ const ChoseImage = ({ previewImage, setPreviewImage, ...props }) => {
           </div>
         )}
 
-        {previewImage && (
+        {previewImage.secure_url && (
           <img
-            src={previewImage}
+            src={previewImage.secure_url}
             className="w-full h-full rounded-md object-cover"
           />
         )}
@@ -51,8 +46,13 @@ const ChoseImage = ({ previewImage, setPreviewImage, ...props }) => {
           accept="image/*"
           onChange={async (event: ChangeEvent<HTMLInputElement>) => {
             if (event?.target?.files?.[0]) {
-              deleteLastImage();
-              setPreviewImage("");
+              if (previewImage.secure_url) {
+                deleteLastImage();
+              }
+              setPreviewImage({
+                secure_url: "",
+                public_id: "",
+              });
               setLoading(true);
               const { signature, timestamp } = await createSignature();
               if (signature) {
@@ -64,7 +64,10 @@ const ChoseImage = ({ previewImage, setPreviewImage, ...props }) => {
                 setLoading(false);
                 console.log(mainImage);
 
-                setPreviewImage(mainImage.secure_url);
+                setPreviewImage({
+                  secure_url: mainImage.secure_url,
+                  public_id: mainImage.public_id,
+                });
               }
             }
           }}

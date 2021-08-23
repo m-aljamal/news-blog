@@ -25,7 +25,10 @@ export interface INav {
 }
 interface IPost {
   title: string;
-  image: string;
+  image: {
+    secure_url: string;
+    public_id: string;
+  };
   description: string;
   id: string;
   slug: string;
@@ -75,6 +78,7 @@ export default function Home({
             ))}
           </div>
         </div>
+
         <h2 className="container text-2xl mt-8 text-blue">الاكثر قراءة</h2>
         <div className="sm:flex container mt-8 gap-4">
           <div className="bg-white rounded-lg shadow-lg w-1/2">
@@ -92,6 +96,7 @@ export default function Home({
             })}
           </div>
         </div>
+
         <h2 className="container text-2xl mt-8 text-blue">اخر الاخبار</h2>
         {categories.map((cat) => (
           <div key={cat.name}>

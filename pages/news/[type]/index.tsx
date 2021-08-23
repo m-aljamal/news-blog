@@ -3,7 +3,6 @@ import { ICats } from "pages";
 import prisma from "src/prisma";
 import Link from "next/link";
 import NavBar from "src/components/navbar";
-import Post from "src/components/post";
 import Image from "next/image";
 import LogoNav from "src/components/navbar/LogoNav";
 import PostWithDescription from "src/components/post/PostWithDescription";
@@ -31,7 +30,7 @@ export default function index({ posts, categories }: ICats) {
               <Link href={link}>
                 <div className="relative h-96">
                   <Image
-                    src={firstPost?.image}
+                    src={firstPost?.image.secure_url}
                     layout="fill"
                     objectFit="cover"
                     className="rounded-t-lg cursor-pointer "

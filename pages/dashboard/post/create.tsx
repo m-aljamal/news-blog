@@ -13,12 +13,12 @@ export const validationSchema = yup.object().shape({
   categoryName: yup.string().required("الرجاء اختيار تصنيف البوست"),
   description: yup.string().required("الرجاء كتابة شرح مختصر 25 كلمة"),
   slug: yup.string().required("الرجاء كتابة رابط للبوست"),
-  image: yup.string().required("الرجاء اختيار صورة للبوست"),
+  // image: yup.object().required("الرجاء اختيار صورة للبوست"),
 });
 
 export interface IFormData {
   title: string;
-  image: string;
+  image: { secure_url: string; public_id: string };
   description: string;
   slug: string;
   categoryName: string;
@@ -31,7 +31,10 @@ export default function create({ categories }) {
   const [ChosenCategory, setChosenCategory] = useState("");
   const [typeOfPost, setTypeOfPost] = useState("");
   const [loading, setLoading] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
+  const [previewImage, setPreviewImage] = useState({
+    secure_url: "",
+    public_id: "",
+  });
 
   const {
     register,
@@ -65,7 +68,10 @@ export default function create({ categories }) {
         toast.success("تم النشر بنجاح!");
         e.target.reset();
         setTypeOfPost("");
-        setPreviewImage("");
+        setPreviewImage({
+          secure_url: "",
+          public_id: "",
+        });
         setChosenCategory("");
         await editor.current.clear();
       }

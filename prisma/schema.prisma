@@ -47,7 +47,7 @@ model Post {
   title        String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  image        String
+  image        Json
   description  String
   slug         String   @unique
   category     Category @relation(fields: [categoryName], references: [name])
@@ -57,6 +57,7 @@ model Post {
   userName     String
   mostRead     Boolean  @default(false)
   important    Boolean  @default(false)
+  isPublished  Boolean  @default(false)
 
   @@map("posts")
 }

@@ -11,7 +11,7 @@ export default function Post({ post, ...props }) {
             <Image
               width={250}
               height={140}
-              src={post.image}
+              src={post.image.secure_url}
               alt={post.title}
               objectFit="cover"
               layout="responsive"

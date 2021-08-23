@@ -20,7 +20,7 @@ export default function PostWithDescription({ post, ...props }) {
         <Link href={`/news/${post.categoryName}/${post.slug}`}>
           <div className="relative h-[280px]">
             <Image
-              src={post?.image}
+              src={post?.image.secure_url}
               layout="fill"
               objectFit="cover"
               className="rounded-tl-lg sm:rounded-bl-lg cursor-pointer rounded-tr-lg sm:rounded-tr-none"

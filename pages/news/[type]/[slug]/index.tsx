@@ -71,7 +71,7 @@ export default function index({ categories, post, relatedPosts }) {
               </div>
               <div className="relative h-[350px] md:h-[450px] xl:h-[500px]">
                 <Image
-                  src={post?.image}
+                  src={post?.image.secure_url}
                   alt={post?.title}
                   layout="fill"
                   objectFit="cover"

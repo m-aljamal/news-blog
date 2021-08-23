@@ -2,18 +2,59 @@
 CREATE TYPE "Role" AS ENUM ('ADMINISTRATOR', 'EDITOR', 'AUTHOR', 'SUBSCRIBER', 'USER');
 
 -- CreateTable
+CREATE TABLE "Business" (
+    "id" TEXT NOT NULL,
+    "businessName" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "businessType" TEXT NOT NULL,
+    "website" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "coordinates" JSONB NOT NULL,
+    "images" JSONB[],
+    "country" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "jobDescription" TEXT NOT NULL,
+    "logo" JSONB NOT NULL,
+    "businessStart" TEXT NOT NULL,
+    "NumberOfEmployees" TEXT NOT NULL,
+    "faceBook" TEXT NOT NULL,
+    "instagram" TEXT NOT NULL,
+    "youtube" TEXT NOT NULL,
+    "whatsAppNumber" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Review" (
+    "id" TEXT NOT NULL,
+    "star" INTEGER NOT NULL DEFAULT 0,
+    "review" TEXT NOT NULL,
+    "businessId" TEXT,
+    "userName" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "posts" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "image" TEXT NOT NULL,
+    "image" JSONB NOT NULL,
     "description" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "categoryName" TEXT NOT NULL,
     "topNews" BOOLEAN NOT NULL DEFAULT false,
     "userName" TEXT NOT NULL,
     "mostRead" BOOLEAN NOT NULL DEFAULT false,
+    "important" BOOLEAN NOT NULL DEFAULT false,
+    "isPublished" BOOLEAN NOT NULL DEFAULT false,
 
     PRIMARY KEY ("id")
 );
@@ -70,7 +111,6 @@ CREATE TABLE "Session" (
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "name" TEXT,
-    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "role" "Role" NOT NULL DEFAULT E'USER',
     "email" TEXT,
     "emailVerified" TIMESTAMP(3),
@@ -119,6 +159,9 @@ CREATE UNIQUE INDEX "VerificationRequest.token_unique" ON "VerificationRequest"(
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VerificationRequest.identifier_token_unique" ON "VerificationRequest"("identifier", "token");
+
+-- AddForeignKey
+ALTER TABLE "Review" ADD FOREIGN KEY ("businessId") REFERENCES "Business"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "posts" ADD FOREIGN KEY ("categoryName") REFERENCES "categories"("name") ON DELETE CASCADE ON UPDATE CASCADE;

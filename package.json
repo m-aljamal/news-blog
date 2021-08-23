@@ -37,7 +37,7 @@
     "@next-auth/prisma-adapter": "^0.5.3",
     "@prisma/client": "^2.27.0",
     "axios": "^0.21.1",
-    "cloudinary": "^1.26.2",
+    "cloudinary": "^1.26.3",
     "got": "^11.8.2",
     "mapbox-gl": "^2.4.0",
     "metascraper": "^5.22.11",
