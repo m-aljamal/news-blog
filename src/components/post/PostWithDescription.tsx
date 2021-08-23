@@ -6,7 +6,7 @@ export default function PostWithDescription({ post, ...props }) {
   return (
     <div
       key={post.id}
-      className={`flex justify-around gap-4 bg-white  rounded-lg sm:flex-row flex-col-reverse shadow-md ${props.style}`}
+      className={`flex justify-around gap-4 bg-white min-h-[250px] rounded-lg sm:flex-row flex-col-reverse shadow-md ${props.style}`}
     >
       <div className="w-full sm:w-3/5 p-4">
         <Link href={`/news/${post.categoryName}/${post.slug}`}>
@@ -18,7 +18,7 @@ export default function PostWithDescription({ post, ...props }) {
       </div>
       <div className="w-full  sm:w-2/5">
         <Link href={`/news/${post.categoryName}/${post.slug}`}>
-          <div className="relative h-[280px]">
+          <div className="relative h-[250px]  sm:h-[100%]">
             <Image
               src={post?.image.secure_url}
               layout="fill"

@@ -81,10 +81,10 @@ export default function Home({
 
         <h2 className="container text-2xl mt-8 text-blue">الاكثر قراءة</h2>
         <div className="sm:flex container mt-8 gap-4">
-          <div className="bg-white rounded-lg shadow-lg w-1/2">
+          <div className="bg-white rounded-lg shadow-lg sm:w-1/2">
             <MostReadMain post={mostRead[0]} />
           </div>
-          <div className="w-1/2 grid lg:grid-cols-2 gap-4 mt-4 sm:mt-0">
+          <div className="sm:w-1/2 grid lg:grid-cols-2 gap-4 mt-4 sm:mt-0">
             {mostRead.map((post, i) => {
               if (i > 0) {
                 return (

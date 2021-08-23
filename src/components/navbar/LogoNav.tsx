@@ -6,8 +6,8 @@ export default function LogoNav() {
       <div className="container text-left text-3xl py-6 font-bold flex justify-between">
         <Link href="/">
           <div className="cursor-pointer">
-            <span> موقع </span>
-            <span className="text-red-400">اخبار </span>
+            <span> ياسمين </span>
+            <span className="text-red-400">برس </span>
           </div>
         </Link>
         <div>

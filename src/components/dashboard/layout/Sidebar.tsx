@@ -80,6 +80,17 @@ export default function Sidebar() {
                 icon="far fa-newspaper"
               />
             </ul>
+            <hr className="my-4 lg:min-w-full" />
+            <h6 className="lg:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+              خدمات
+            </h6>
+            <ul>
+              <Nav
+                link="/dashboard/profession/create"
+                text="المهن"
+                icon="far fa-clipboard"
+              />
+            </ul>
           </div>
         </div>
       </nav>

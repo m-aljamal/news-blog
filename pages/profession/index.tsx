@@ -4,10 +4,11 @@ import Select from "src/components/Select";
 import router from "next/router";
 import Image from "next/image";
 import LogoNav from "src/components/navbar/LogoNav";
-export default function profession({ countries, businessType }) {
+import NavBar from "src/components/navbar/index";
+import Link from "next/link";
+export default function profession({ countries, businessType, categories }) {
   const [prof, setProf] = useState("اختيار المهنة");
   const [country, setCountry] = useState("اختر البلد");
-
   const handleSerch = () => {
     router.push(
       {
@@ -25,13 +26,13 @@ export default function profession({ countries, businessType }) {
   return (
     <>
       <LogoNav />
-
+      <NavBar categories={categories} />
       <div className="container">
-        <div className=" mt-4">
-          <h2 className="title">
-            ابحث عن محترفين محليين لأي شيء تقريبًا
-          </h2>
-          <div className="mt-8 w-2/4">
+        <div className="flex  justify-around mt-8">
+          <div className="">
+            <h2 className="title mb-3">
+              ابحث عن محترفين محليين لأي شيء تقريبًا
+            </h2>
             <SerchForm
               countries={countries}
               country={country}
@@ -42,6 +43,17 @@ export default function profession({ countries, businessType }) {
               handleSerch={handleSerch}
             />
           </div>
+          <div>
+            <h2 className="title mb-3">سجل مهنتك مجاناً</h2>
+            <Link href="/profession/create">
+              <button
+                type="button"
+                className="  rounded-lg border px-8 py-1 w-full text-white bg-blue"
+              >
+                تسجيل
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </>
@@ -49,6 +61,8 @@ export default function profession({ countries, businessType }) {
 }
 
 export const getStaticProps = async () => {
+  const categories = await prisma.category.findMany();
+
   const businessType = await prisma.business.groupBy({
     by: ["businessType", "country"],
   });
@@ -59,6 +73,7 @@ export const getStaticProps = async () => {
     props: {
       countries,
       businessType,
+      categories,
     },
   };
 };

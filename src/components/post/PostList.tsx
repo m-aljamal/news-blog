@@ -1,6 +1,7 @@
 import PostWithDescription from "./PostWithDescription";
 import Link from "next/link";
 export default function PostList({ postList }) {
+  if (!postList.posts.length) return <div></div>;
   return (
     <div className="container mt-4">
       <Link href={`/news/${postList.name}`}>
