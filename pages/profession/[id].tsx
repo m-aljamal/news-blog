@@ -14,7 +14,6 @@ import StarRate from "src/components/business/StarRate";
 export default function prof({ findBusiness, rateAvg }) {
   let [isOpen, setIsOpen] = useState(false);
   const { query } = useRouter();
-  console.log(findBusiness);
   const avrage = Math.round(rateAvg._avg.star);
   return (
     <>

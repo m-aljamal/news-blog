@@ -1,8 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { createSignature, uploadImage } from "../uploadImage";
 import * as yup from "yup";
+import ChoseImage from "../dashboard/postForm/ChoseImage";
+import Link from "next/link";
+import Map from "src/components/business/Map";
+import Head from "next/head";
+import axios from "axios";
 
 interface IProf {
   name: string;
@@ -28,6 +33,8 @@ interface IProf {
 export const validationSchema = yup.object().shape({});
 
 export default function CreateProfessionForm() {
+  const [chosenLogo, setChosenLogo] = useState("");
+  const [coordinates, setCoordinates] = useState([0,0]);
   const {
     register,
     handleSubmit,
@@ -41,52 +48,160 @@ export default function CreateProfessionForm() {
   const onSubmit = (data) => {
     console.log(data);
   };
+  const handleCoordinates = async (e) => {
+    console.log(e.target.value);
+    try {
+      const res = await axios.post("/api/profession/getcoordinates", {
+        address: e.target.value,
+      });
+      console.log(res.data.coordinates);
+      setCoordinates(res.data.coordinates);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="container mt-8">
-      <h2 className="title mb-4">تسجيل مهنة جديدة:</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <Input text="الاسم والكنية:" reg={register("name")} />
-          <Input text="اسم المحل أو الشركة:" reg={register("businessName")} />
-          <Input
-            text="نوع العمل:"
-            reg={register("businessType")}
-            holder="مثال: تجارة مواد غذائية"
-          />
-          <Input
-            text="شرح عن الخدمات المقدمة:"
-            reg={register("jobDescription")}
-            holder="مثال: مبيع الخضراوات والفواكه بجميع انواعها"
-            type="textaria"
-          />
-          <Input
-            text="لمحة عن المحل او الشركة:"
-            reg={register("description")}
-            holder="مثال: تأسست الشركة عام 2015 وهي الان احد اقوى الشركات التجارية"
-            type="textaria"
-          />
-        </div>
-        <button type="submit">تسجيل</button>
-      </form>
-    </div>
+    <>
+      <Head>
+        <link
+          href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css"
+          rel="stylesheet"
+        />
+      </Head>
+      <div className=" mt-8 ">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="container">
+            <h2 className="title mb-4">تسجيل مهنة جديدة:</h2>
+            <div className="sm:flex sm:gap-8  ">
+              <div className="sm:w-1/2">
+                <Input text="الاسم والكنية:" reg={register("name")} />
+                <Input
+                  text="اسم المحل أو الشركة:"
+                  reg={register("businessName")}
+                />
+                <Input
+                  text="نوع العمل:"
+                  reg={register("businessType")}
+                  holder="مثال: تجارة مواد غذائية"
+                />
+                <Input
+                  text="شرح عن الخدمات المقدمة:"
+                  reg={register("jobDescription")}
+                  holder="مثال: مبيع الخضراوات والفواكه بجميع انواعها"
+                  type="textaria"
+                />
+                <Input
+                  text="لمحة عن المحل او الشركة:"
+                  reg={register("description")}
+                  holder="مثال: تأسست الشركة عام 2015 وهي الان احد اقوى الشركات التجارية"
+                  type="textaria"
+                />
+                <Input
+                  text="سنوات الخبرة في العمل:"
+                  reg={register("businessStart")}
+                  holder="مثال: 5 سنوات"
+                />
+                <Input
+                  text="عدد الموظفين:"
+                  reg={register("NumberOfEmployees")}
+                  type="number"
+                />
+              </div>
+              <div className="sm:w-1/2">
+                <div>
+                  <Input
+                    text="وسائل التواصل:"
+                    reg={register("phone")}
+                    holder="رقم الهاتف مثال: 009053975914266"
+                  />
+                  <Input
+                    reg={register("whatsAppNumber")}
+                    holder="رقم وتس اب مثال: 009053975914266"
+                  />
+                  <Input
+                    reg={register("faceBook")}
+                    holder="رابط صفحة فيس بوك"
+                  />
+                  <Input
+                    reg={register("instagram")}
+                    holder="رابط صفحة انستغرام"
+                  />
+                  <Input reg={register("youtube")} holder="رابط قناة يوتيوب" />
+                  <Input
+                    reg={register("website")}
+                    holder="رابط الموقع الشخصي"
+                  />
+                  <Input reg={register("email")} holder="الايميل الشخصي" />
+                </div>
+                <div className="">
+                  <Input
+                    text="العنوان:"
+                    reg={register("country")}
+                    holder="الدولة"
+                  />
+                  <Input
+                    text="العنوان بالتفصيل:"
+                    holder="الافضل كتابة العنوان حسب لغة الدولة"
+                    type="textaria"
+                    onChange={handleCoordinates}
+                  />
+                  <div className="rounded-lg shadow-md   ">
+                    <Map title="فهفمث" coordinates={coordinates} />
+                  </div>
+                </div>
+                {/* <div>
+                <p className="title">اختيار اللوغو:</p>
+                <ChoseImage
+                  error={null}
+                  previewImage={chosenLogo}
+                  setPreviewImage={setChosenLogo}
+                />
+              </div> */}
+              </div>
+            </div>
+          </div>
+          <div className="bg-white border sticky bottom-0 py-2 z-20">
+            <div className="flex justify-around text-white">
+              <button
+                type="submit"
+                className="border px-3 py-1 bg-blue rounded-md w-32"
+              >
+                تسجيل
+              </button>
+              <Link href="/profession">
+                <button
+                  type="button"
+                  className="border px-3 py-1 bg-red-500 rounded-md w-32"
+                >
+                  الغاء
+                </button>
+              </Link>
+            </div>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }
 
-const Input = ({ text, reg, ...props }) => {
+const Input = (props) => {
   return (
     <div className="my-4">
-      <p className="title">{text}</p>
+      <p className="title">{props.text}</p>
       {props.type === "textaria" ? (
         <textarea
-          {...reg}
+          onChange={props.onChange}
+          {...props.reg}
           placeholder={props.holder}
-          className="p-2 w-1/2 text-gray-500 text-sm border outline mt-1"
+          className="p-2 w-full text-gray-500 text-sm border outline mt-1"
         />
       ) : (
         <input
-          {...reg}
+          {...props.reg}
+          type={props.type}
           placeholder={props.holder}
-          className="p-2 w-1/2 text-gray-500 text-sm border outline mt-1"
+          className="p-2 w-full text-gray-500 text-sm border outline mt-1"
         />
       )}
     </div>

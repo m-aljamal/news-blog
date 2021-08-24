@@ -30,6 +30,6 @@ export default function Map({ coordinates, title }) {
       .addTo(map);
 
     return () => map.remove();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [coordinates]); // eslint-disable-line react-hooks/exhaustive-deps
   return <div className="w-full h-72 rounded-t-lg" ref={mapContainerRef} />;
 }

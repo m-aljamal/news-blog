@@ -5,11 +5,11 @@ import axios from "axios";
 
 const ChoseImage = ({ previewImage, setPreviewImage, ...props }) => {
   const [loading, setLoading] = useState(false);
-  const deleteLastImage = async () => {
-    await axios.post("/api/cloudinary/delete", {
-      imgId: "bkqqmxv3ueji9vkk8oap",
-    });
-  };
+  // const deleteLastImage = async () => {
+  //   await axios.post("/api/cloudinary/delete", {
+  //     imgId: "bkqqmxv3ueji9vkk8oap",
+  //   });
+  // };
 
   return (
     <div className="  h-60 mx-auto mb-16">
@@ -46,9 +46,9 @@ const ChoseImage = ({ previewImage, setPreviewImage, ...props }) => {
           accept="image/*"
           onChange={async (event: ChangeEvent<HTMLInputElement>) => {
             if (event?.target?.files?.[0]) {
-              if (previewImage.secure_url) {
-                deleteLastImage();
-              }
+              // if (previewImage.secure_url) {
+              //   deleteLastImage();
+              // }
               setPreviewImage({
                 secure_url: "",
                 public_id: "",

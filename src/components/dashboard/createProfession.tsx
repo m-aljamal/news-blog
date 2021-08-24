@@ -2,24 +2,24 @@ import { useForm } from "react-hook-form";
 import { createSignature, uploadImage } from "../uploadImage";
 
 interface IProf {
-  name: string;
-  businessName: string;
-  businessType: string;
-  website: string;
-  phone: string;
-  address: string;
-  country: string;
-  email: string;
-  description: string;
+  // name: string;
+  // businessName: string;
+  // businessType: string;
+  // website: string;
+//  phone : string;
+  // address: string;
+  // country: string;
+  // email: string;
+  // description: string;
   images: string[];
-  logo: string;
-  jobDescription: string;
-  businessStart: string;
-  NumberOfEmployees: number;
-  faceBook: string;
-  instagram: string;
-  youtube: string;
-  whatsAppNumber: string;
+  // logo: string;
+  // jobDescription: string;
+  // businessStart: string;
+  // NumberOfEmployees: number;
+  // faceBook: string;
+  // instagram: string;
+  // youtube: string;
+  // whatsAppNumber: string;
 }
 
 export default function createProfession() {
