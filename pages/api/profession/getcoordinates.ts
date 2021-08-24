@@ -14,11 +14,12 @@ handler.use(auth);
 handler.post(async (req, res) => {
   try {
     const geoData = await geocoder
-      .forwardGeocode({ query: req.body.address, limit: 1 })
+      .forwardGeocode({ query: req.body.address })
       .send();
-    console.log(geoData.body.features[0].geometry.coordinates);
 
-    res.json({ coordinates: geoData.body.features[0].geometry.coordinates });
+    console.log(geoData.body.features);
+
+    res.json(geoData.body.features);
   } catch (error) {
     console.error(error);
 

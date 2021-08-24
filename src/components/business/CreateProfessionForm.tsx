@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { createSignature, uploadImage } from "../uploadImage";
 import * as yup from "yup";
@@ -8,6 +8,7 @@ import Link from "next/link";
 import Map from "src/components/business/Map";
 import Head from "next/head";
 import axios from "axios";
+import LoadingSpinner from "../layout/LoadingSpinner";
 
 interface IProf {
   name: string;
@@ -34,7 +35,9 @@ export const validationSchema = yup.object().shape({});
 
 export default function CreateProfessionForm() {
   const [chosenLogo, setChosenLogo] = useState("");
-  const [coordinates, setCoordinates] = useState([0,0]);
+  const [coordinates, setCoordinates] = useState([34.1938487, 40.0189354]);
+  const [typeAddress, setTypeAddress] = useState("");
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -49,17 +52,28 @@ export default function CreateProfessionForm() {
     console.log(data);
   };
   const handleCoordinates = async (e) => {
-    console.log(e.target.value);
-    try {
-      const res = await axios.post("/api/profession/getcoordinates", {
-        address: e.target.value,
-      });
-      console.log(res.data.coordinates);
-      setCoordinates(res.data.coordinates);
-    } catch (error) {
-      console.log(error);
-    }
+    setLoading(true);
+    setTypeAddress(e.target.value);
   };
+
+  useEffect(() => {
+    const time = setTimeout(async () => {
+      try {
+        if (typeAddress) {
+          const res = await axios.post("/api/profession/getcoordinates", {
+            address: typeAddress,
+          });
+          setLoading(false);
+          console.log(res);
+          // setCoordinates(res.data.coordinates);
+        }
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    }, 3000);
+    return () => clearTimeout(time);
+  }, [typeAddress]);
 
   return (
     <>
@@ -141,13 +155,18 @@ export default function CreateProfessionForm() {
                     holder="الدولة"
                   />
                   <Input
-                    text="العنوان بالتفصيل:"
                     holder="الافضل كتابة العنوان حسب لغة الدولة"
                     type="textaria"
                     onChange={handleCoordinates}
                   />
-                  <div className="rounded-lg shadow-md   ">
-                    <Map title="فهفمث" coordinates={coordinates} />
+                  <div className="rounded-lg shadow-md">
+                    {loading ? (
+                      <div className="w-full h-72 bg-gray-200">
+                        <LoadingSpinner />
+                      </div>
+                    ) : (
+                      <Map title={"address"} coordinates={coordinates} />
+                    )}
                   </div>
                 </div>
                 {/* <div>

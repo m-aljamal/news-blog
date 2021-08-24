@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { PhotographIcon } from "@heroicons/react/solid";
 import { createSignature, uploadImage } from "src/components/uploadImage";
 import axios from "axios";
+import LoadingSpinner from "src/components/layout/LoadingSpinner";
 
 const ChoseImage = ({ previewImage, setPreviewImage, ...props }) => {
   const [loading, setLoading] = useState(false);
@@ -18,13 +19,7 @@ const ChoseImage = ({ previewImage, setPreviewImage, ...props }) => {
           props.error ? "ring ring-red-500" : ""
         }  `}
       >
-        {loading && (
-          <div className="w-full h-full grid">
-            <div className=" flex justify-center items-center">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue"></div>
-            </div>
-          </div>
-        )}
+        {loading && <LoadingSpinner />}
 
         {previewImage.secure_url && (
           <img
