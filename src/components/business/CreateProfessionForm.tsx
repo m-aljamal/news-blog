@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { createSignature, uploadImage } from "../uploadImage";
 import * as yup from "yup";
@@ -35,9 +35,13 @@ export const validationSchema = yup.object().shape({});
 
 export default function CreateProfessionForm() {
   const [chosenLogo, setChosenLogo] = useState("");
-  const [coordinates, setCoordinates] = useState([34.1938487, 40.0189354]);
+  const [userPlace, setUserPlace] = useState("");
+  const [coordinates, setCoordinates] = useState([0, 0]);
   const [typeAddress, setTypeAddress] = useState("");
   const [loading, setLoading] = useState(false);
+  const [autocomplete, setAutocomplete] = useState(null);
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const ref = useRef();
   const {
     register,
     handleSubmit,
@@ -53,6 +57,7 @@ export default function CreateProfessionForm() {
   };
   const handleCoordinates = async (e) => {
     setLoading(true);
+    setUserPlace(e.target.value);
     setTypeAddress(e.target.value);
   };
 
@@ -63,18 +68,36 @@ export default function CreateProfessionForm() {
           const res = await axios.post("/api/profession/getcoordinates", {
             address: typeAddress,
           });
-          setLoading(false);
-          console.log(res);
+
+          setAutocomplete(res.data);
+          setShowAutocomplete(true);
           // setCoordinates(res.data.coordinates);
         }
       } catch (error) {
         console.log(error);
         setLoading(false);
       }
-    }, 3000);
+    }, 2000);
     return () => clearTimeout(time);
   }, [typeAddress]);
 
+  const handleAutoComplete = (place) => {
+    setUserPlace(place.fullAddress);
+    setCoordinates(place.coordinates);
+    setShowAutocomplete(false);
+  };
+
+  useEffect(() => {
+    const listener = (e) => {
+      if (!(ref.current! as any).contains(e.target)) {
+        setShowAutocomplete(false);
+      }
+    };
+    document.addEventListener("click", listener);
+    return () => {
+      document.removeEventListener("click", listener);
+    };
+  }, []);
   return (
     <>
       <Head>
@@ -123,6 +146,39 @@ export default function CreateProfessionForm() {
                 />
               </div>
               <div className="sm:w-1/2">
+                <div className="">
+                  <Input
+                    text="العنوان:"
+                    reg={register("country")}
+                    holder="الدولة"
+                  />
+                  <div className="relative" ref={ref}>
+                    <Input
+                      holder="الافضل كتابة العنوان حسب لغة الدولة"
+                      type="textaria"
+                      onChange={handleCoordinates}
+                      style="my-0"
+                      value={userPlace}
+                    />
+                    <ul className="absolute   z-50 shadow-md bg-white w-full rounded-md">
+                      {/* <List title="kilis" fullAddress="Kilis, Turkey" />
+                      <List title="gaz" fullAddress="Kilis, Hastani yol" /> */}
+                      {showAutocomplete &&
+                        autocomplete.map((l) => (
+                          <List
+                            title={l.text}
+                            fullAddress={l.place_name}
+                            key={l.id}
+                            onClick={handleAutoComplete}
+                            coordinates={l.geometry.coordinates}
+                          />
+                        ))}
+                    </ul>
+                  </div>
+                  <div className="rounded-lg shadow-md">
+                    <Map title={"address"} coordinates={coordinates} />
+                  </div>
+                </div>
                 <div>
                   <Input
                     text="وسائل التواصل:"
@@ -148,27 +204,7 @@ export default function CreateProfessionForm() {
                   />
                   <Input reg={register("email")} holder="الايميل الشخصي" />
                 </div>
-                <div className="">
-                  <Input
-                    text="العنوان:"
-                    reg={register("country")}
-                    holder="الدولة"
-                  />
-                  <Input
-                    holder="الافضل كتابة العنوان حسب لغة الدولة"
-                    type="textaria"
-                    onChange={handleCoordinates}
-                  />
-                  <div className="rounded-lg shadow-md">
-                    {loading ? (
-                      <div className="w-full h-72 bg-gray-200">
-                        <LoadingSpinner />
-                      </div>
-                    ) : (
-                      <Map title={"address"} coordinates={coordinates} />
-                    )}
-                  </div>
-                </div>
+
                 {/* <div>
                 <p className="title">اختيار اللوغو:</p>
                 <ChoseImage
@@ -206,10 +242,11 @@ export default function CreateProfessionForm() {
 
 const Input = (props) => {
   return (
-    <div className="my-4">
+    <div className={`my-4 ${props.style}`}>
       <p className="title">{props.text}</p>
       {props.type === "textaria" ? (
         <textarea
+          value={props.value}
           onChange={props.onChange}
           {...props.reg}
           placeholder={props.holder}
@@ -220,9 +257,21 @@ const Input = (props) => {
           {...props.reg}
           type={props.type}
           placeholder={props.holder}
-          className="p-2 w-full text-gray-500 text-sm border outline mt-1"
+          className="p-2 w-full text-gray-500 text-sm border outline mt-1 bg-gray-100"
         />
       )}
     </div>
+  );
+};
+
+const List = ({ title, fullAddress, onClick, coordinates }) => {
+  return (
+    <li
+      className="px-4 py-2 cursor-pointer hover:bg-gray-100 "
+      onClick={() => onClick({ fullAddress, coordinates })}
+    >
+      <h2 className="text-gray-800 font-bold">{title}</h2>
+      <p className="text-gray-400 ">{fullAddress}</p>
+    </li>
   );
 };
