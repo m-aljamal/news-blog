@@ -56,48 +56,7 @@ export default function CreateProfessionForm() {
   const onSubmit = (data) => {
     console.log(data);
   };
-  const handleCoordinates = async (e) => {
-    setLoading(true);
-    setUserPlace(e.target.value);
-    setTypeAddress(e.target.value);
-  };
 
-  // useEffect(() => {
-  //   const time = setTimeout(async () => {
-  //     try {
-  //       if (typeAddress) {
-  //         const res = await axios.post("/api/profession/getcoordinates", {
-  //           address: typeAddress,
-  //         });
-
-  //         setAutocomplete(res.data);
-  //         setShowAutocomplete(true);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //       setLoading(false);
-  //     }
-  //   }, 2000);
-  //   return () => clearTimeout(time);
-  // }, [typeAddress]);
-
-  const handleAutoComplete = (place) => {
-    setUserPlace(place.fullAddress);
-    setCoordinates(place.coordinates);
-    setShowAutocomplete(false);
-  };
-
-  // useEffect(() => {
-  //   const listener = (e) => {
-  //     if (!(ref.current! as any).contains(e.target)) {
-  //       setShowAutocomplete(false);
-  //     }
-  //   };
-  //   document.addEventListener("click", listener);
-  //   return () => {
-  //     document.removeEventListener("click", listener);
-  //   };
-  // }, []);
   return (
     <>
       <Head>
@@ -126,9 +85,9 @@ export default function CreateProfessionForm() {
           <SocialMedia register={register} />
         </SectionContainer>
 
-        <div>
-          <h2>صور</h2>
-        </div>
+        <SectionContainer title="صور العمل">
+          <ChooseImages register={register} />
+        </SectionContainer>
       </div>
     </>
   );
@@ -140,11 +99,12 @@ const Input = (props) => {
       <p className="text-gray-600">{props.text}</p>
       {props.type === "textaria" ? (
         <textarea
+          disabled={props.disabled}
           value={props.value}
           onChange={props.onChange}
           {...props.reg}
           placeholder={props.holder}
-          className="p-2 w-full text-gray-600 text-sm border outline mt-1 bg-gray-100"
+          className={`p-2 w-full text-gray-600 text-sm border outline mt-1 bg-gray-100 ${props.textAriaStyle}`}
         />
       ) : (
         <input
@@ -252,7 +212,7 @@ const WorkAddress = ({ register }) => {
           const res = await axios.post("/api/profession/getcoordinates", {
             address: typeAddress,
           });
-
+          setLoading(false);
           setAutocomplete(res.data);
           setShowAutocomplete(true);
         }
@@ -267,6 +227,7 @@ const WorkAddress = ({ register }) => {
   useEffect(() => {
     const listener = (e) => {
       if (!(ref.current! as any).contains(e.target)) {
+        setLoading(false);
         setShowAutocomplete(false);
       }
     };
@@ -286,13 +247,14 @@ const WorkAddress = ({ register }) => {
       <div>
         <div className="relative" ref={ref}>
           <div className="relative ">
-            <SvgLoading />
+            {loading && <SvgLoading />}
             <Input
               text="العنوان:"
               holder="الافضل كتابة العنوان حسب لغة الدولة"
               type="textaria"
               onChange={handleCoordinates}
               value={userPlace}
+              textAriaStyle=""
             />
           </div>
           <ul className="absolute   z-50 shadow-md bg-white w-full rounded-md">
@@ -380,4 +342,8 @@ const InputWithIcon = ({ children, icon }) => {
       {children}
     </label>
   );
+};
+
+const ChooseImages = ({ register }) => {
+  return <div></div>;
 };
