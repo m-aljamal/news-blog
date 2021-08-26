@@ -17,7 +17,6 @@ const ChoseImage = ({
   //     imgId: "bkqqmxv3ueji9vkk8oap",
   //   });
   // };
-  console.log(previewImage);
 
   return (
     <div className="  h-60 mx-auto mb-16">

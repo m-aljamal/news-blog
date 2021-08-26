@@ -35,14 +35,8 @@ interface IProf {
 export const validationSchema = yup.object().shape({});
 
 export default function CreateProfessionForm() {
-  const [chosenLogo, setChosenLogo] = useState("");
-  const [userPlace, setUserPlace] = useState("");
-  const [coordinates, setCoordinates] = useState([0, 0]);
-  const [typeAddress, setTypeAddress] = useState("");
   const [loading, setLoading] = useState(false);
-  const [autocomplete, setAutocomplete] = useState(null);
-  const [showAutocomplete, setShowAutocomplete] = useState(false);
-  const ref = useRef();
+
   const {
     register,
     handleSubmit,
@@ -54,6 +48,7 @@ export default function CreateProfessionForm() {
     resolver: yupResolver(validationSchema),
   });
   const onSubmit = (data) => {
+    setLoading(true);
     console.log(data);
   };
 
@@ -65,7 +60,7 @@ export default function CreateProfessionForm() {
           rel="stylesheet"
         />
       </Head>
-      <div className="mt-8 container">
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-8 container">
         <h2 className="title mb-8 border-b w-[fit-content] border-red-600 py-2">
           تسجيل مهنة جديدة:
         </h2>
@@ -78,7 +73,7 @@ export default function CreateProfessionForm() {
         </SectionContainer>
 
         <SectionContainer title="عنوان العمل">
-          <WorkAddress register={register} />
+          <WorkAddress register={register} setValue={setValue} />
         </SectionContainer>
 
         <SectionContainer title="وسائل التواصل">
@@ -86,9 +81,22 @@ export default function CreateProfessionForm() {
         </SectionContainer>
 
         <SectionContainer title="صور العمل">
-          <ChooseImages register={register} />
+          <ChooseImages register={register} setValue={setValue} />
         </SectionContainer>
-      </div>
+        <div className="flex pb-8 justify-around">
+          <div className="bg-green-500 text-white px-10 py-1 rounded-md relative">
+            {loading && (
+              <SvgLoading style="text-white right-[85px] top-2 w-5 h-5" />
+            )}
+            <button type="submit" className="font-bold">
+              تسجيل
+            </button>
+          </div>
+          <button className="bg-red-500 font-bold text-white px-10 py-1 rounded-md">
+            الغاء
+          </button>
+        </div>
+      </form>
     </>
   );
 }
@@ -186,7 +194,7 @@ const WorkDescription = ({ register }) => {
   );
 };
 
-const WorkAddress = ({ register }) => {
+const WorkAddress = ({ register, setValue }) => {
   const [userPlace, setUserPlace] = useState("");
   const [coordinates, setCoordinates] = useState([35.2433, 38.9637]);
   const [typeAddress, setTypeAddress] = useState("");
@@ -236,6 +244,7 @@ const WorkAddress = ({ register }) => {
       document.removeEventListener("click", listener);
     };
   }, []);
+  setValue("address", userPlace);
   return (
     <div className="grid grid-cols-2 gap-x-8 gap-y-4 ">
       <Input
@@ -344,9 +353,11 @@ const InputWithIcon = ({ children, icon }) => {
   );
 };
 
-const ChooseImages = ({ register }) => {
+const ChooseImages = ({ register, setValue }) => {
   const [previewLogo, setPreviewLogo] = useState("");
   const [previewImages, setPreviewImages] = useState([]);
+  setValue("logo", previewLogo);
+  setValue("images", previewImages);
   return (
     <div className="grid grid-cols-2 gap-10">
       <div>
