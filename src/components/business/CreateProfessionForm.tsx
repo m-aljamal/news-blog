@@ -345,5 +345,27 @@ const InputWithIcon = ({ children, icon }) => {
 };
 
 const ChooseImages = ({ register }) => {
-  return <div></div>;
+  const [previewLogo, setPreviewLogo] = useState("");
+  const [previewImages, setPreviewImages] = useState([]);
+  return (
+    <div className="grid grid-cols-2 gap-10">
+      <div>
+        <ChoseImage
+          buttonText="اختيار لوغو"
+          error={null}
+          previewImage={previewLogo}
+          setPreviewImage={setPreviewLogo}
+        />
+      </div>
+      <div>
+        <ChoseImage
+          buttonText="اختيار صور عن العمل"
+          error={null}
+          previewImage={previewImages}
+          setPreviewImage={setPreviewImages}
+          multiple
+        />
+      </div>
+    </div>
+  );
 };

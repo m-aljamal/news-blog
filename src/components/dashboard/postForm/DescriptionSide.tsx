@@ -90,6 +90,7 @@ const DescriptionSide = ({
           error={errors.image?.message}
         />
         <ChoseImage
+          buttonText="اختيار صورة البوست"
           error={errors.image?.message}
           previewImage={previewImage}
           setPreviewImage={setPreviewImage}
