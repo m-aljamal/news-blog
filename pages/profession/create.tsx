@@ -1,5 +1,5 @@
 import React from "react";
-import CreateProfessionForm from "src/components/business/CreateProfessionForm";
+import CreateProfessionForm from "src/components/business/CreateProfessionForm/index";
 import LogoNav from "src/components/navbar/LogoNav";
 import prisma from "src/prisma";
 import NavBar from "src/components/navbar/index";
