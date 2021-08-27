@@ -1,4 +1,5 @@
 import Input from "./Input";
+import InputWithIcon from "./InputWithIcon";
 const SocialMedia = ({ register }) => {
   return (
     <div>

@@ -8,3 +8,4 @@ const InputWithIcon = ({ children, icon }) => {
     </label>
   );
 };
+export default InputWithIcon;

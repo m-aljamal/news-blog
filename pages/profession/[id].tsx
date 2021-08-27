@@ -30,7 +30,7 @@ export default function prof({ findBusiness, rateAvg }) {
             <div className=" flex gap-4   justify-between">
               <div className="w-2/5">
                 <Image
-                  src={findBusiness.logo.image}
+                  src={findBusiness?.logo?.secure_url}
                   width={150}
                   height={120}
                   layout="responsive"
@@ -113,7 +113,7 @@ export default function prof({ findBusiness, rateAvg }) {
                   {findBusiness.images?.map((i) => (
                     <div key={i.public_id}>
                       <Image
-                        src={i.image}
+                        src={i.secure_url}
                         width={250}
                         height={180}
                         layout="responsive"
@@ -130,7 +130,7 @@ export default function prof({ findBusiness, rateAvg }) {
             <div className=" rounded-lg shadow-md  sticky top-10">
               <Map
                 title={findBusiness?.businessName}
-                coordinates={findBusiness.coordinates.coordinates}
+                coordinates={findBusiness.coordinates}
               />
               <div className="mt-4 flex gap-4 px-4 py-5">
                 <LinkWithLogo

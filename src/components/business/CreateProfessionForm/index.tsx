@@ -14,6 +14,7 @@ import WorkDescription from "./WorkDescription";
 import WorkAddress from "./WorkAddress";
 import ChooseImages from "./ChooseImages";
 import SocialMedia from "./SocialMedia";
+import toast, { Toaster } from "react-hot-toast";
 interface IProf {
   name: string;
   businessName: string;
@@ -25,14 +26,19 @@ interface IProf {
   address: string;
   country: string;
   email: string;
-  images: string[];
-  logo: string;
+  images: Image[];
+  logo: Image;
   businessStart: string;
   NumberOfEmployees: number;
   faceBook: string;
   instagram: string;
   youtube: string;
   whatsAppNumber: string;
+  coordinates: [];
+}
+interface Image {
+  public_id: string;
+  secure_url: string;
 }
 export default function CreateProfessionForm() {
   const validationSchema = yup.object().shape({});
@@ -47,9 +53,26 @@ export default function CreateProfessionForm() {
   } = useForm<IProf>({
     resolver: yupResolver(validationSchema),
   });
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setLoading(true);
     console.log(data);
+    toast(
+      `سعيدين بأضافة عملك معنا 
+      سوف تتم الاضافة كحد اقصى خلال يومين عمل
+      او سيتم التواصل معكم اذا كان في تعديل في طلبكم
+      `,
+      {
+        duration: 6000,
+        icon: "👏",
+      }
+    );
+    // try {
+    //   const res = await axios.post("/api/profession/createNew", data);
+    //   setLoading(false);
+    // } catch (error) {
+    //   console.error(error);
+    //   setLoading(false);
+    // }
   };
 
   return (
@@ -60,6 +83,7 @@ export default function CreateProfessionForm() {
           rel="stylesheet"
         />
       </Head>
+      <Toaster />
       <form onSubmit={handleSubmit(onSubmit)} className="mt-8 container">
         <h2 className="title mb-8 border-b w-[fit-content] border-red-600 py-2">
           تسجيل مهنة جديدة:
@@ -73,7 +97,7 @@ export default function CreateProfessionForm() {
         </SectionContainer>
 
         <SectionContainer title="عنوان العمل">
-          <WorkAddress register={register} setValue={setValue} />
+          <WorkAddress setValue={setValue} />
         </SectionContainer>
 
         <SectionContainer title="وسائل التواصل">

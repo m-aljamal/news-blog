@@ -29,7 +29,7 @@ export default function BusinessCard({ business }) {
           <div className="w-1/4 text-center ">
             <Image
               className="rounded-t-lg"
-              src={business.logo.image}
+              src={business.logo.secure_url}
               width={180}
               height={100}
               objectFit="cover"
