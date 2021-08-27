@@ -11,7 +11,7 @@ const countries = [
   },
   { name: "سوريا" },
 ];
-export default function WorkAddress({ setValue }) {
+export default function WorkAddress({ setValue, errors, clearErrors }) {
   const [userPlace, setUserPlace] = useState("");
   const [coordinates, setCoordinates] = useState([35.2433, 38.9637]);
   const [typeAddress, setTypeAddress] = useState("");
@@ -22,6 +22,7 @@ export default function WorkAddress({ setValue }) {
 
   const ref = useRef();
   const handleCoordinates = async (e) => {
+    clearErrors("address");
     setLoading(true);
     setUserPlace(e.target.value);
     setTypeAddress(e.target.value);
@@ -68,7 +69,7 @@ export default function WorkAddress({ setValue }) {
   setValue("country", selectedCountry.name);
 
   return (
-    <div className="grid grid-cols-2 gap-x-8 gap-y-4 ">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 ">
       <div>
         <p className="text-gray-600">الدولة:</p>
         <ListboxOptions
@@ -84,11 +85,11 @@ export default function WorkAddress({ setValue }) {
             {loading && <SvgLoading />}
             <Input
               text="العنوان:"
-              holder="الافضل كتابة العنوان حسب لغة الدولة"
+              holder="اكتب العنوان وشاهد الخريطة"
               type="textaria"
               onChange={handleCoordinates}
               value={userPlace}
-              textAriaStyle=""
+              errors={errors}
             />
           </div>
           <ul className="absolute z-50 shadow-md bg-white w-full rounded-md">
@@ -105,7 +106,7 @@ export default function WorkAddress({ setValue }) {
           </ul>
         </div>
       </div>
-      <div className="rounded-lg shadow-md col-start-1 col-end-3">
+      <div className="rounded-lg shadow-md md:col-start-1 md:col-end-3">
         <Map title={"address"} coordinates={coordinates} />
       </div>
     </div>

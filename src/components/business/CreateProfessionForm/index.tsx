@@ -1,12 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import Link from "next/link";
-import Map from "src/components/business/Map";
 import Head from "next/head";
 import axios from "axios";
-
+import Router from "next/router";
 import SvgLoading from "src/components/layout/SvgLoading";
 import SectionContainer from "./SectionContainer";
 import WorkAndPersonName from "./WorkAndPersonName";
@@ -15,6 +14,7 @@ import WorkAddress from "./WorkAddress";
 import ChooseImages from "./ChooseImages";
 import SocialMedia from "./SocialMedia";
 import toast, { Toaster } from "react-hot-toast";
+import router from "next/router";
 interface IProf {
   name: string;
   businessName: string;
@@ -41,7 +41,22 @@ interface Image {
   secure_url: string;
 }
 export default function CreateProfessionForm() {
-  const validationSchema = yup.object().shape({});
+  const validationSchema = yup.object().shape({
+    name: yup.string().required("الرجاء كتابة الاسم والكنية"),
+    businessName: yup.string().required("الرجاء كتابة اسم الشركة "),
+    businessType: yup.string().required("الرجاء كتابة نوع العمل "),
+    description: yup.string().required("الرجاء ادخال لمحة عن الشركة"),
+    jobDescription: yup.string().required("الرجاء ادخال شرح عن الشركة"),
+    businessStart: yup.string().required("الرجاء ادخال سنوات الخبرة"),
+    NumberOfEmployees: yup
+      .number()
+      .typeError("يجب ان يكون الرقم صفر او اكبر")
+      .min(0, "يجب ان يكون الرقم صفر او اكبر")
+      .required("الرجاء ادخال عدد الموظفين"),
+    address: yup.string().required("الرجاء ادخل العنوان"),
+    phone: yup.string().required("الرجاء ادخال رقم الهاتف"),
+    whatsAppNumber: yup.string().required("الرجاء ادخال رقم الوتس اب"),
+  });
   const [loading, setLoading] = useState(false);
   const {
     register,
@@ -50,29 +65,31 @@ export default function CreateProfessionForm() {
     formState: { errors },
     getValues,
     reset,
+    clearErrors,
   } = useForm<IProf>({
     resolver: yupResolver(validationSchema),
   });
   const onSubmit = async (data) => {
     setLoading(true);
-    console.log(data);
-    toast(
-      `سعيدين بأضافة عملك معنا 
-      سوف تتم الاضافة كحد اقصى خلال يومين عمل
-      او سيتم التواصل معكم اذا كان في تعديل في طلبكم
-      `,
-      {
-        duration: 6000,
-        icon: "👏",
-      }
-    );
-    // try {
-    //   const res = await axios.post("/api/profession/createNew", data);
-    //   setLoading(false);
-    // } catch (error) {
-    //   console.error(error);
-    //   setLoading(false);
-    // }
+
+    try {
+      const res = await axios.post("/api/profession/createNew", data);
+      toast(
+        `
+        يشرفنا انضمامك معنا في موقعنا، سوف تتم الإضافة خلال يومين عمل كحد أقصى أو سيتم التواصل معكم من أجل تعديل طلبكم.
+        `,
+        {
+          duration: 6000,
+          icon: "👏",
+        }
+      );
+      setLoading(false);
+      router.push("/profession");
+    } catch (error) {
+      console.error(error);
+      toast.error("حدث خطأ الرجاء التواصل معنا او اعادة المحاولة");
+      setLoading(false);
+    }
   };
 
   return (
@@ -89,19 +106,44 @@ export default function CreateProfessionForm() {
           تسجيل مهنة جديدة:
         </h2>
         <SectionContainer title="الاسم ونوع العمل">
-          <WorkAndPersonName register={register} />
+          <WorkAndPersonName
+            register={register}
+            errors={{
+              name: errors.name?.message,
+              businessName: errors.businessName?.message,
+              businessType: errors.businessType?.message,
+            }}
+          />
         </SectionContainer>
 
         <SectionContainer title="شرح عن العمل">
-          <WorkDescription register={register} />
+          <WorkDescription
+            register={register}
+            errors={{
+              description: errors.description?.message,
+              jobDescription: errors.jobDescription?.message,
+              businessStart: errors.businessStart?.message,
+              NumberOfEmployees: errors.NumberOfEmployees?.message,
+            }}
+          />
         </SectionContainer>
 
         <SectionContainer title="عنوان العمل">
-          <WorkAddress setValue={setValue} />
+          <WorkAddress
+            setValue={setValue}
+            errors={errors.address?.message}
+            clearErrors={clearErrors}
+          />
         </SectionContainer>
 
         <SectionContainer title="وسائل التواصل">
-          <SocialMedia register={register} />
+          <SocialMedia
+            register={register}
+            errors={{
+              phone: errors.phone?.message,
+              whatsAppNumber: errors.phone?.message,
+            }}
+          />
         </SectionContainer>
 
         <SectionContainer title="صور العمل">
@@ -110,15 +152,17 @@ export default function CreateProfessionForm() {
         <div className="flex pb-8 justify-around">
           <div className="bg-green-500 text-white px-10 py-1 rounded-md relative">
             {loading && (
-              <SvgLoading style="text-white right-[85px] top-2 w-5 h-5" />
+              <SvgLoading style="text-white right-[88px] top-2 w-4 h-4" />
             )}
             <button type="submit" className="font-bold">
               تسجيل
             </button>
           </div>
-          <button className="bg-red-500 font-bold text-white px-10 py-1 rounded-md">
-            الغاء
-          </button>
+          <Link href="/profession">
+            <button className="bg-red-500 font-bold text-white px-10 py-1 rounded-md">
+              الغاء
+            </button>
+          </Link>
         </div>
       </form>
     </>

@@ -6,7 +6,7 @@ const ChooseImages = ({ register, setValue }) => {
   setValue("logo", previewLogo);
   setValue("images", previewImages);
   return (
-    <div className="grid grid-cols-2 gap-10">
+    <div className="grid   md:grid-cols-2 gap-10">
       <div>
         <ChoseImage
           buttonText="اختيار لوغو"

@@ -9,7 +9,11 @@ export default function Input(props) {
           onChange={props.onChange}
           {...props.reg}
           placeholder={props.holder}
-          className={`p-2 w-full text-gray-600 text-sm border outline mt-1 bg-gray-100 ${props.textAriaStyle}`}
+          className={`p-2 w-full text-gray-600 text-sm border ${
+            props.errors
+              ? "outline focus:ring-red-500 border border-red-500"
+              : "outline"
+          }  mt-1 bg-gray-100 ${props.textAriaStyle}`}
         />
       ) : (
         <input
@@ -17,8 +21,15 @@ export default function Input(props) {
           {...props.reg}
           type={props.type}
           placeholder={props.holder}
-          className={`p-2 w-full text-gray-500 text-sm border outline mt-1 bg-gray-100 ${props.inputStyle}`}
+          className={`p-2 w-full text-gray-500 text-sm border ${
+            props.errors
+              ? "outline focus:ring-red-500 border border-red-500"
+              : "outline"
+          }  mt-1 bg-gray-100 ${props.inputStyle}`}
         />
+      )}
+      {props.errors && (
+        <p className="text-red-500 text-xs mt-2">{props.errors}</p>
       )}
     </div>
   );

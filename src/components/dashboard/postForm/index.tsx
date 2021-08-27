@@ -33,7 +33,7 @@ export default function index({
               {...register("title")}
               className={` ${
                 errors.title?.message
-                  ? " outline focus:ring-red-500"
+                  ? " outline focus:ring-red-500 focus:ring-1"
                   : "outline"
               } title w-full text-lg
               `}

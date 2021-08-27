@@ -23,7 +23,7 @@ model Business {
   jobDescription    String
   logo              Json
   businessStart     String
-  NumberOfEmployees String
+  NumberOfEmployees Int
   faceBook          String
   instagram         String
   youtube           String
