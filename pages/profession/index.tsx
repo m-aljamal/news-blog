@@ -8,17 +8,22 @@ import NavBar from "src/components/navbar/index";
 import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import Input from "src/components/business/CreateProfessionForm/Input";
+import InputWithIcon from "src/components/business/CreateProfessionForm/InputWithIcon";
 interface IProf {
   profession: string;
   country: string;
   name: string;
-  phone: string;
+  whatsAppNumber: string;
 }
 export default function profession({ countries, businessType, categories }) {
   const [prof, setProf] = useState("اختيار المهنة");
   const [country, setCountry] = useState("اختر البلد");
-
-  const validationSchema = yup.object().shape({});
+  const validationSchema = yup.object().shape({
+    name: yup.string().required("الرجاء اكتب الاسم والكنية"),
+    whatsAppNumber: yup.string().required("الرجاء اكتب رقم وتس اب"),
+  });
   const {
     register,
     handleSubmit,
@@ -47,6 +52,9 @@ export default function profession({ countries, businessType, categories }) {
       handleSerch();
     }
   }, [prof]);
+  const onSubmit = (data) => {
+    console.log(data);
+  };
   return (
     <>
       <LogoNav />
@@ -63,7 +71,6 @@ export default function profession({ countries, businessType, categories }) {
           filtetBusiness={filtetBusiness}
           prof={prof}
           setProf={setProf}
-          handleSerch={handleSerch}
         />
 
         <div className="mt-16">
@@ -71,63 +78,51 @@ export default function profession({ countries, businessType, categories }) {
             سجل مهنتك مجاناً
           </h2>
 
-          <div className="mt-8">
-            <h2>مساعدة في التسجيل</h2>
-            <div>
-              <p className="text-gray-600">الاسم</p>
-              <input placeholder="الاسم والكنية" />
+          <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
+            <div className="sm:flex">
+              <h2 className="ml-8 title mb-4 sm:mb-0">مساعدة في التسجيل</h2>
+              <div className="flex-1">
+                <div className="grid md:grid-cols-2 md:gap-8 gap-2 ">
+                  <Input
+                    text="الاسم والكنية"
+                    reg={register("name")}
+                    errors={errors.name?.message}
+                  />
+                  <InputWithIcon
+                    icon={`fab fa-whatsapp text-green-600 translate-y-2 ${
+                      errors.name && "-translate-y-2"
+                    }`}
+                  >
+                    <Input
+                      text="رقم الهاتف"
+                      reg={register("whatsAppNumber")}
+                      holder="رقم وتس اب مثال: 009053975914266"
+                      inputStyle="pr-9"
+                      errors={errors.whatsAppNumber?.message}
+                    />
+                  </InputWithIcon>
+                </div>
+                <div>
+                  <button
+                    type="submit"
+                    className="rounded-lg w-full mt-4 border px-8 py-1 text-white bg-blue"
+                  >
+                    ارسل
+                  </button>
+                  <p className="text-center my-2 title">أو</p>
+                  <Link href="/profession/create">
+                    <button
+                      type="button"
+                      className="   rounded-lg border px-8 py-1 w-full text-white bg-gray-400"
+                    >
+                      سجل لوحدك
+                    </button>
+                  </Link>
+                </div>
+              </div>
             </div>
-            <div>
-              <p className="text-gray-600">رقم التواصل</p>
-            </div>
-          </div>
-
-          <Link href="/profession/create">
-            <button
-              type="button"
-              className="  rounded-lg border px-8 py-1 w-full text-white bg-blue"
-            >
-              سجل لوحدك
-            </button>
-          </Link>
+          </form>
         </div>
-        {/* <div className="flex  justify-around mt-8">
-          <div>
-            <h2 className="title mb-3">
-              ابحث عن محترفين محليين لأي شيء تقريبًا
-            </h2>
-            <SerchForm
-              countries={countries}
-              country={country}
-              setCountry={setCountry}
-              filtetBusiness={filtetBusiness}
-              prof={prof}
-              setProf={setProf}
-              handleSerch={handleSerch}
-            />
-          </div>
-          <div>
-            <h2 className="title mb-3">سجل مهنتك مجاناً</h2>
-            <div>
-              <Link href="/profession/create">
-                <button
-                  type="button"
-                  className="  rounded-lg border px-8 py-1 w-full text-white bg-blue"
-                >
-                  سجل لوحدك
-                </button>
-              </Link>
-              <Link href="/profession/create">
-                <button
-                  type="button"
-                  className=" rounded-lg border px-8 py-1 w-full text-white bg-blue mt-4"
-                >
-                  دعنا نسجل
-                </button>
-              </Link>
-            </div>
-          </div>
-        </div> */}
       </div>
     </>
   );
@@ -158,11 +153,10 @@ const SerchForm = ({
   filtetBusiness,
   prof,
   setProf,
-  handleSerch,
 }) => {
   return (
     <div>
-      <div className="grid grid-cols-2 gap-8  ">
+      <div className="grid md:grid-cols-2 md:gap-8 gap-3  ">
         <div>
           <Select
             data={countries}
@@ -180,13 +174,6 @@ const SerchForm = ({
           />
         </div>
       </div>
-      {/* <button
-        onClick={handleSerch}
-        className=" mt-6 w-1/2 	 rounded-lg border px-8 py-1   text-white bg-blue"
-        disabled={country === "اختر البلد" || prof === "اختيار المهنة"}
-      >
-        بحث
-      </button> */}
     </div>
   );
 };
