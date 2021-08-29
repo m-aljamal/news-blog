@@ -11,6 +11,8 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import Input from "src/components/business/CreateProfessionForm/Input";
 import InputWithIcon from "src/components/business/CreateProfessionForm/InputWithIcon";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 interface IProf {
   profession: string;
   country: string;
@@ -52,18 +54,34 @@ export default function profession({ countries, businessType, categories }) {
       handleSerch();
     }
   }, [prof]);
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const res = await axios.post("/api/profession/helprequest", data);
+
+      if (res.status === 200) {
+        toast.success(
+          "شكرا لطلبكم الانضمام معنا, سيتم التواصل معكم في مدة اقصاها يوميان",
+          {
+            duration: 6000,
+            icon: "👏",
+          }
+        );
+      }
+    } catch (error) {
+      toast.error("يوجد خطأ الرجاء اعادة المحاولة");
+      console.error(error);
+    }
   };
   return (
     <>
       <LogoNav />
       <NavBar categories={categories} />
+
       <div className="container">
         <h2 className="title my-6 py-2 border-b w-[fit-content] border-red-500">
-          ابحث عن محترفين محليين لأي شيء تقريبًا
+          ابحث عن محترفين محليين
         </h2>
-
+        <Toaster />
         <SerchForm
           countries={countries}
           country={country}
@@ -90,7 +108,7 @@ export default function profession({ countries, businessType, categories }) {
                   />
                   <InputWithIcon
                     icon={`fab fa-whatsapp text-green-600 translate-y-2 ${
-                      errors.name && "-translate-y-2"
+                      errors.whatsAppNumber && "-translate-y-2"
                     }`}
                   >
                     <Input
@@ -115,7 +133,7 @@ export default function profession({ countries, businessType, categories }) {
                       type="button"
                       className="   rounded-lg border px-8 py-1 w-full text-white bg-gray-400"
                     >
-                      سجل لوحدك
+                      سجل بنفسك
                     </button>
                   </Link>
                 </div>

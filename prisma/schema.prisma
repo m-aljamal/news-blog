@@ -138,3 +138,10 @@ model VerificationRequest {
 
   @@unique([identifier, token])
 }
+
+model BusinessHelpRequest {
+  id             String  @id @default(cuid())
+  name           String
+  whatsAppNumber String
+  hasProcessed   Boolean @default(false)
+}
