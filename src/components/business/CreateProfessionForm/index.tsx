@@ -74,17 +74,19 @@ export default function CreateProfessionForm() {
 
     try {
       const res = await axios.post("/api/profession/createNew", data);
-      toast(
-        `
-        يشرفنا انضمامك معنا في موقعنا، سوف تتم الإضافة خلال يومين عمل كحد أقصى أو سيتم التواصل معكم من أجل تعديل طلبكم.
-        `,
-        {
-          duration: 6000,
-          icon: "👏",
-        }
-      );
-      setLoading(false);
-      router.push("/profession");
+      if (res.status === 200) {
+        toast(
+          `
+          يشرفنا انضمامك معنا في موقعنا، سوف تتم الإضافة خلال يومين عمل كحد أقصى أو سيتم التواصل معكم من أجل تعديل طلبكم.
+          `,
+          {
+            duration: 10000,
+            icon: "👏",
+          }
+        );
+        setLoading(false);
+        router.push("/profession");
+      }
     } catch (error) {
       console.error(error);
       toast.error("حدث خطأ الرجاء التواصل معنا او اعادة المحاولة");

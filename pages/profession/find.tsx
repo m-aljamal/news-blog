@@ -26,12 +26,14 @@ export default function findProfPage({ findProf }) {
 export async function getServerSideProps(ctx) {
   const findProf = await prisma.business.findMany({
     where: {
-      country: ctx.query.country,
-      businessType: ctx.query.prof,
+      country: ctx.query?.country,
+      businessType: ctx.query?.prof,
+      approved: true,
     },
     select: {
       businessName: true,
       id: true,
+      businessType: true,
       jobDescription: true,
       name: true,
       logo: true,

@@ -52,18 +52,18 @@ export default function WorkAddress({ setValue, errors, clearErrors }) {
     return () => clearTimeout(time);
   }, [typeAddress]);
 
+  const listener = (e) => {
+    if (!(ref?.current as any)?.contains(e.target)) {
+      setLoading(false);
+      setShowAutocomplete(false);
+    }
+  };
   useEffect(() => {
-    const listener = (e) => {
-      if (!(ref.current! as any).contains(e.target)) {
-        setLoading(false);
-        setShowAutocomplete(false);
-      }
-    };
     document.addEventListener("click", listener);
     return () => {
       document.removeEventListener("click", listener);
     };
-  }, []);
+  }, [ref, typeAddress]);
   setValue("address", userPlace);
   setValue("coordinates", coordinates);
   setValue("country", selectedCountry.name);

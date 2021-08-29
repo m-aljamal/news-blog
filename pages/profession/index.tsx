@@ -2,7 +2,6 @@ import prisma from "src/prisma";
 import { useEffect, useState } from "react";
 import Select from "src/components/Select";
 import router from "next/router";
-import Image from "next/image";
 import LogoNav from "src/components/navbar/LogoNav";
 import NavBar from "src/components/navbar/index";
 import Link from "next/link";
@@ -13,6 +12,7 @@ import Input from "src/components/business/CreateProfessionForm/Input";
 import InputWithIcon from "src/components/business/CreateProfessionForm/InputWithIcon";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import useSWR from "swr";
 interface IProf {
   profession: string;
   country: string;
@@ -20,6 +20,13 @@ interface IProf {
   whatsAppNumber: string;
 }
 export default function profession({ countries, businessType, categories }) {
+  const { data, error } = useSWR("/api/profession/find", {
+    initialData: {
+      businessType,
+      countries,
+    },
+  });
+
   const [prof, setProf] = useState("اختيار المهنة");
   const [country, setCountry] = useState("اختر البلد");
   const validationSchema = yup.object().shape({
@@ -46,7 +53,7 @@ export default function profession({ countries, businessType, categories }) {
     );
   };
   const filtetBusiness = (country) => {
-    return businessType.filter((b) => b.country === country);
+    return data?.businessType?.filter((b) => b.country === country);
   };
 
   useEffect(() => {
@@ -83,7 +90,7 @@ export default function profession({ countries, businessType, categories }) {
         </h2>
         <Toaster />
         <SerchForm
-          countries={countries}
+          countries={data?.countries}
           country={country}
           setCountry={setCountry}
           filtetBusiness={filtetBusiness}
@@ -151,9 +158,15 @@ export const getStaticProps = async () => {
 
   const businessType = await prisma.business.groupBy({
     by: ["businessType", "country"],
+    where: {
+      approved: true,
+    },
   });
   const countries = await prisma.business.groupBy({
     by: ["country"],
+    where: {
+      approved: true,
+    },
   });
   return {
     props: {

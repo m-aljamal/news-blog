@@ -27,14 +27,16 @@ export default function BusinessCard({ business }) {
             <p className="businessBody mt-4">{business.jobDescription}</p>
           </div>
           <div className="w-1/4 text-center ">
-            <Image
-              className="rounded-t-lg"
-              src={business.logo.secure_url}
-              width={180}
-              height={100}
-              objectFit="cover"
-              layout="responsive"
-            />
+            {business?.logo?.secure_url && (
+              <Image
+                className="rounded-t-lg"
+                src={business?.logo?.secure_url}
+                width={180}
+                height={100}
+                objectFit="cover"
+                layout="responsive"
+              />
+            )}
           </div>
         </div>
       </Link>

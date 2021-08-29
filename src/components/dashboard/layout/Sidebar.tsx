@@ -87,7 +87,17 @@ export default function Sidebar() {
             <ul>
               <Nav
                 link="/dashboard/profession/create"
-                text="المهن"
+                text="اضافة مهنة "
+                icon="far fa-clipboard"
+              />
+              <Nav
+                link="/dashboard/requests/addprofessionRequest"
+                text="طلبات الاضافة "
+                icon="far fa-clipboard"
+              />
+              <Nav
+                link="/dashboard/requests/helpRequest"
+                text="طلب مساعدة"
                 icon="far fa-clipboard"
               />
             </ul>

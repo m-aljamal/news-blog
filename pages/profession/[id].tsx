@@ -9,12 +9,12 @@ import { useState } from "react";
 import Model from "src/components/layout/Model";
 import ShareBusiness from "src/components/business/ShareBusiness";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/client";
 import StarRate from "src/components/business/StarRate";
 export default function prof({ findBusiness, rateAvg }) {
   let [isOpen, setIsOpen] = useState(false);
   const { query } = useRouter();
   const avrage = Math.round(rateAvg._avg.star);
+
   return (
     <>
       <Head>
@@ -29,12 +29,14 @@ export default function prof({ findBusiness, rateAvg }) {
           <div className="w-3/5 rounded-lg shadow-md border-2 border-opacity-50">
             <div className=" flex gap-4   justify-between">
               <div className="w-2/5">
-                <Image
-                  src={findBusiness?.logo?.secure_url}
-                  width={150}
-                  height={120}
-                  layout="responsive"
-                />
+                {findBusiness?.logo?.secure_url && (
+                  <Image
+                    src={findBusiness?.logo?.secure_url}
+                    width={150}
+                    height={120}
+                    layout="responsive"
+                  />
+                )}
               </div>
               <div className="w-3/5 text-center p-4">
                 <h2 className="text-lg">{findBusiness?.businessName}</h2>
@@ -113,7 +115,7 @@ export default function prof({ findBusiness, rateAvg }) {
                   {findBusiness.images?.map((i) => (
                     <div key={i.public_id}>
                       <Image
-                        src={i.secure_url}
+                        src={i?.secure_url}
                         width={250}
                         height={180}
                         layout="responsive"
