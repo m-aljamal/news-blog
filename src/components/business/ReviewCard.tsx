@@ -1,4 +1,5 @@
 import StarRate from "src/components/business/StarRate";
+import ShowDate from "../layout/ShowDate";
 export default function ReviewCard({ review }) {
   return (
     <div>
@@ -8,10 +9,7 @@ export default function ReviewCard({ review }) {
       </div>
       <p className="businessBody">{review.review}</p>
       <p className="businessBody mt-4">
-        {new Date(review.createdAt).toLocaleDateString("ar-Sy", {
-          year: "numeric",
-          month: "long",
-        })}
+        <ShowDate date={review.createdAt} />
       </p>
       <hr className="my-4" />
     </div>

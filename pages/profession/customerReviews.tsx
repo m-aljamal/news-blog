@@ -1,11 +1,10 @@
-import axios from "axios";
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import ReviewCard from "src/components/business/ReviewCard";
 import WriteReview from "src/components/business/WriteReview";
 import Model from "src/components/layout/Model";
 import useSWR from "swr";
-import Button from "./Button";
+import Button from "../../src/components/layout/Button";
 
 export default function CustomerReviews({ id, reviews }) {
   // const [session, loading] = useSession();
@@ -23,9 +22,7 @@ export default function CustomerReviews({ id, reviews }) {
   const { data, error } = useSWR(`/api/profession/allreviews/${id}`, {
     initialData: { reviews },
   });
-  if (error) {
-    return <p>يوجد خطأ</p>;
-  }
+
   return (
     <div>
       <Toaster />
@@ -52,11 +49,12 @@ export default function CustomerReviews({ id, reviews }) {
       </div>
 
       <div>
-        {data?.reviews.map((review) => (
-          <div key={review.id} className="mt-8">
-            <ReviewCard review={review} />
-          </div>
-        ))}
+        {data?.reviews &&
+          data.reviews.map((review) => (
+            <div key={review.id} className="mt-8">
+              <ReviewCard review={review} />
+            </div>
+          ))}
       </div>
       <Model
         open={isOpen}

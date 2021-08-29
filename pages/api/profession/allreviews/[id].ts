@@ -17,7 +17,6 @@ handler.get(async (req, res) => {
       },
     });
     res.json(reviews);
-    console.log("reviews", reviews);
   } catch (error) {
     res.json({ error: "يوجد خطأ الرجاء اعادة المحاولة" });
   }

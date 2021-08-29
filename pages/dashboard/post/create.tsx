@@ -7,6 +7,7 @@ import Form from "src/components/dashboard/postForm/";
 import toast, { Toaster } from "react-hot-toast";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { getSession } from "next-auth/client";
 
 export const validationSchema = yup.object().shape({
   title: yup.string().required("الرجاء كتابة عنوان للبوست"),
@@ -103,7 +104,10 @@ export default function create({ categories }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps(ctx) {
+  // const res = await axios.get("/api/checkAuth");
+  // console.log(res);
+
   const categories = await prisma.category.findMany();
   return {
     props: { categories },

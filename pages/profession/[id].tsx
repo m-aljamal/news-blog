@@ -8,8 +8,8 @@ import Model from "src/components/layout/Model";
 import { useRouter } from "next/router";
 import StarRate from "src/components/business/StarRate";
 import Share from "src/components/post/Share";
-import Button from "./Button";
-import CustomerReviews from "./CustomerReviews";
+import Button from "../../src/components/layout/Button";
+import CustomerReviews from "./customerReviews";
 export default function prof({ findBusiness, rateAvg }) {
   let [isOpen, setIsOpen] = useState(false);
   const { query } = useRouter();

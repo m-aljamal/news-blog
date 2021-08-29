@@ -5,7 +5,6 @@ import * as yup from "yup";
 import Link from "next/link";
 import Head from "next/head";
 import axios from "axios";
-import Router from "next/router";
 import SvgLoading from "src/components/layout/SvgLoading";
 import SectionContainer from "./SectionContainer";
 import WorkAndPersonName from "./WorkAndPersonName";
