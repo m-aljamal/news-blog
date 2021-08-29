@@ -14,11 +14,13 @@ export default function findProfPage({ findProf }) {
         تم العثور على {findProf.length} شركة مختصة في
         <span className="text-red-500"> {query.prof}</span>:
       </h2>
-      {findProf?.map((p) => (
-        <div key={p.id} className=" py-4">
-          <BusinessCard business={p} />
-        </div>
-      ))}
+      <div className="xl:grid grid-cols-2">
+        {findProf?.map((p) => (
+          <div key={p.id} className=" py-4">
+            <BusinessCard business={p} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

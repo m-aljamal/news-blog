@@ -1,15 +1,15 @@
-import WriteReview from "src/components/business/WriteReview";
 import prisma from "src/prisma";
-import ReviewCard from "src/components/business/ReviewCard";
 import Map from "src/components/business/Map";
 import Head from "next/head";
 import Image from "next/image";
 import BackLinkButton from "src/components/business/BackLinkButton";
 import { useState } from "react";
 import Model from "src/components/layout/Model";
-import ShareBusiness from "src/components/business/ShareBusiness";
 import { useRouter } from "next/router";
 import StarRate from "src/components/business/StarRate";
+import Share from "src/components/post/Share";
+import Button from "./Button";
+import CustomerReviews from "./CustomerReviews";
 export default function prof({ findBusiness, rateAvg }) {
   let [isOpen, setIsOpen] = useState(false);
   const { query } = useRouter();
@@ -25,20 +25,22 @@ export default function prof({ findBusiness, rateAvg }) {
       </Head>
       <div className="container pb-8">
         <BackLinkButton text="رجوع للخلف" />
-        <div className="flex gap-8 mt-4 relative">
-          <div className="w-3/5 rounded-lg shadow-md border-2 border-opacity-50">
-            <div className=" flex gap-4   justify-between">
-              <div className="w-2/5">
+        <div className="flex gap-8 flex-col-reverse sm:flex-row	  mt-4 relative">
+          <div className="sm:w-3/5 rounded-lg shadow-md border p-4">
+            <div className=" sm:flex gap-4   ">
+              <div className="sm:w-2/5 relative  ">
                 {findBusiness?.logo?.secure_url && (
                   <Image
                     src={findBusiness?.logo?.secure_url}
-                    width={150}
-                    height={120}
                     layout="responsive"
+                    className="rounded-md"
+                    width={250}
+                    height={250}
+                    objectFit="fill"
                   />
                 )}
               </div>
-              <div className="w-3/5 text-center p-4">
+              <div className="sm:w-3/5 text-center mt-4 sm:mt-0 ">
                 <h2 className="text-lg">{findBusiness?.businessName}</h2>
                 <p className="mt-2 businessBody">{findBusiness.name}</p>
                 <DisplayRate avrage={avrage} starCount={rateAvg._count.star} />
@@ -52,18 +54,22 @@ export default function prof({ findBusiness, rateAvg }) {
                 open={isOpen}
                 setOpen={setIsOpen}
                 title="مشاركة"
-                content={<ShareBusiness />}
+                content={
+                  <Share
+                    link={`${process.env.NEXT_PUBLIC_DOMAIN}/profession/${findBusiness.id}`}
+                  />
+                }
               />
             </div>
-            <div className="px-5">
-              <div className="mt-5">
+            <div>
+              <div className="mt-8">
                 <span className="title">من نحن: </span>
                 <span className="businessBody">
                   {findBusiness?.description}
                 </span>
               </div>
               <div>
-                <div className="mt-4 flex justify-around">
+                <div className="mt-4 flex justify-between">
                   <div>
                     <h2 className="title mb-2">ملخص:</h2>
                     <p>
@@ -86,39 +92,47 @@ export default function prof({ findBusiness, rateAvg }) {
                     </p>
                   </div>
                   <div>
-                    <h2 className="title mb-2">التواصل الاجتماعي: </h2>
                     <div className="flex gap-2 justify-center">
-                      <LinkWithLogo
-                        link={findBusiness.faceBook}
-                        logo="fab fa-facebook-square fa-lg text-blue"
-                      />
-                      <LinkWithLogo
-                        link={findBusiness.instagram}
-                        logo="fab fa-instagram-square fa-lg text-pink-500"
-                      />
-                      <LinkWithLogo
-                        link={findBusiness.youtube}
-                        logo="fab fa-youtube fa-lg text-red-500"
-                      />
-                      <LinkWithLogo
-                        link={findBusiness.website}
-                        logo="fas fa-globe fa-lg text-green-500 "
-                      />
+                      {findBusiness.faceBook && (
+                        <LinkWithLogo
+                          link={findBusiness.faceBook}
+                          logo="fab fa-facebook-square fa-lg text-blue"
+                        />
+                      )}
+                      {findBusiness.instagram && (
+                        <LinkWithLogo
+                          link={findBusiness.instagram}
+                          logo="fab fa-instagram-square fa-lg text-pink-500"
+                        />
+                      )}
+                      {findBusiness.youtube && (
+                        <LinkWithLogo
+                          link={findBusiness.youtube}
+                          logo="fab fa-youtube fa-lg text-red-500"
+                        />
+                      )}
+                      {findBusiness.website && (
+                        <LinkWithLogo
+                          link={findBusiness.website}
+                          logo="fas fa-globe fa-lg text-green-500 "
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
               <div className="mt-4">
                 <hr className="my-4" />
-                <h2 className="title">مشاريع مميزة: </h2>
-                <div className="grid grid-cols-3 gap-4 my-4">
+                <h2 className="title">صور: </h2>
+                <div className="grid grid-cols-3 gap-2 my-4 relative ">
                   {findBusiness.images?.map((i) => (
                     <div key={i.public_id}>
                       <Image
                         src={i?.secure_url}
-                        width={250}
-                        height={180}
                         layout="responsive"
+                        width={150}
+                        height={150}
+                        objectFit="fill"
                       />
                     </div>
                   ))}
@@ -128,7 +142,7 @@ export default function prof({ findBusiness, rateAvg }) {
               <CustomerReviews id={query.id} reviews={findBusiness?.reviews} />
             </div>
           </div>
-          <div className="w-2/5 ">
+          <div className="sm:w-2/5 mt-8 sm:mt-0">
             <div className=" rounded-lg shadow-md  sticky top-10">
               <Map
                 title={findBusiness?.businessName}
@@ -185,6 +199,7 @@ export async function getServerSideProps(ctx) {
       youtube: true,
       whatsAppNumber: true,
       createdAt: true,
+      id: true,
     },
   });
   const rateAvg = await prisma.review.aggregate({
@@ -203,71 +218,6 @@ export async function getServerSideProps(ctx) {
     props: { findBusiness: JSON.parse(JSON.stringify(findBusiness)), rateAvg },
   };
 }
-
-const CustomerReviews = ({ id, reviews }) => {
-  // const [session, loading] = useSession();
-  let [isOpen, setIsOpen] = useState(false);
-  // if (loading) {
-  //   return <p>Loading</p>;
-  // }
-  // const isUserHasReview = () => {
-  //   if (!loading) {
-  //     return reviews.some((r) => r.userName === session?.user?.name);
-  //   }
-  // };
-
-  return (
-    <div>
-      <div>
-        <h2 className="title">تقيمات الزبائن:</h2>
-        <p className="mt-2 businessBody">
-          يتم تصنيف العمل من حيث الجودة والاحترافية وسرعة الاستجابة
-        </p>
-      </div>
-      <div className="my-4">
-        {/* {!isUserHasReview() && (
-          <Button
-            icon="fas fa-pencil-alt mr-2"
-            text="اضافة تقييم"
-            handleClick={() => setIsOpen(true)}
-          />
-        )} */}
-
-        <Button
-          icon="fas fa-pencil-alt mr-2"
-          text="اضافة تقييم"
-          handleClick={() => setIsOpen(true)}
-        />
-      </div>
-
-      <div>
-        {reviews?.map((review) => (
-          <div key={review.id} className="mt-8">
-            <ReviewCard review={review} />
-          </div>
-        ))}
-      </div>
-      <Model
-        open={isOpen}
-        setOpen={setIsOpen}
-        title="اضافة تقييم"
-        content={<WriteReview id={id} />}
-      />
-    </div>
-  );
-};
-
-const Button = ({ icon, text, ...props }) => {
-  return (
-    <button
-      className="border-2 px-4 py-1 text-gray-500 border-gray-500 rounded-md"
-      onClick={props.handleClick}
-    >
-      <span className="text-base">{text}</span>
-      <i className={icon}></i>
-    </button>
-  );
-};
 
 const LinkWithLogo = ({ link, logo, ...props }) => {
   return (

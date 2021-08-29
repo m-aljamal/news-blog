@@ -62,10 +62,7 @@ export default function index({ categories, post, relatedPosts }) {
                 <div className="sm:flex justify-between items-center">
                   <ShowDate date={post.createdAt} />
                   <Share
-                    title={post.title}
-                    description={post.description}
-                    categoryName={post.categoryName}
-                    slug={post.slug}
+                    link={`${process.env.NEXT_PUBLIC_DOMAIN}/news/${post.categoryName}/${post.slug}`}
                   />
                 </div>
               </div>

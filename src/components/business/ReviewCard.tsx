@@ -2,7 +2,7 @@ import StarRate from "src/components/business/StarRate";
 export default function ReviewCard({ review }) {
   return (
     <div>
-      <div className="flex items-center">
+      <div className="sm:flex items-center">
         <p className="ml-2 title">{review.userName}</p>
         <StarRate value={review.star} type="preview" />
       </div>

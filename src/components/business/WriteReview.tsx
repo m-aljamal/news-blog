@@ -1,36 +1,42 @@
+import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { trigger } from "swr";
 import StarRate from "./StarRate";
 
-export default function WriteReview({ id }) {
+export default function WriteReview({ id, close }) {
   const [text, setText] = useState("");
   const [star, setStar] = useState(0);
-  const handleSubmit = async (e) => {
+  const handleSend = async (e) => {
     e.preventDefault();
     try {
-      const rev = await fetch("/api/profession/review", {
-        method: "POST",
-        body: JSON.stringify({ review: text, id, star }),
+      const rev = await axios.post("/api/profession/review", {
+        review: text,
+        id,
+        star,
       });
-      console.log(rev);
+      if (rev.status === 200) {
+        trigger(`/api/profession/allreviews/${id}`);
+        toast.success("تم اضافة التقييم بنجاح");
+        close();
+      }
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form onSubmit={handleSend} id="rev-form">
+      <div className="mt-2">
         <StarRate value={star} setStar={setStar} type="edit" />
       </div>
       <div>
         <textarea
-          className="border-2"
+          className="border w-full outline resize-none p-2 text-gray-500 mt-4"
           placeholder="اكتب تعليق"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
       </div>
-      <button className="border-2">ارسل</button>
     </form>
   );
 }

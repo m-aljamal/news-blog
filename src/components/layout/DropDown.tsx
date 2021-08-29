@@ -1,4 +1,3 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useSession, signOut } from "next-auth/client";
@@ -16,6 +15,7 @@ export default function DropDown() {
       router.push("/login");
     }
   };
+
   return (
     <Menu as="div" className="relative inline-block text-right">
       {({ open }) => (
@@ -45,23 +45,24 @@ export default function DropDown() {
             >
               {session && (
                 <div className="py-1">
-                  <Menu.Item>
-                    {({ active }) => (
-                      <Link href="/dashboard">
-                        <a
-                          className={classNames(
-                            active
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-700",
-                            "block px-4 py-2 text-sm"
-                          )}
-                        >
-                          لوحة التحكم
-                        </a>
-                      </Link>
-                    )}
-                  </Menu.Item>
-
+                  {session.role === "ADMINISTRATOR" && (
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link href="/dashboard">
+                          <a
+                            className={classNames(
+                              active
+                                ? "bg-gray-100 text-gray-900"
+                                : "text-gray-700",
+                              "block px-4 py-2 text-sm"
+                            )}
+                          >
+                            لوحة التحكم
+                          </a>
+                        </Link>
+                      )}
+                    </Menu.Item>
+                  )}
                   <Menu.Item>
                     {({ active }) => (
                       <p

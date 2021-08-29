@@ -8,7 +8,7 @@ const handler = nc({
 });
 handler.use(auth);
 handler.post(async (req, res) => {
-  const data = JSON.parse(req.body);
+  const data = req.body;
   const findLastPreview = await prisma.review.findFirst({
     where: {
       businessId: data.id,

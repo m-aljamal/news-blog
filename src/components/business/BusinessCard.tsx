@@ -14,7 +14,7 @@ export default function BusinessCard({ business }) {
   return (
     <div className="rounded-lg shadow-lg border-2 border-gray-100 border-opacity-30">
       <Link href={`/profession/${business.id}`}>
-        <div className="flex items-center p-4 justify-between cursor-pointer">
+        <div className="flex items-center p-4 justify-between cursor-pointer h-72">
           <div className="w-3/4 px-4">
             <div className="flex gap-4 items-center">
               <p className="title">{business.businessName}</p>
@@ -26,15 +26,13 @@ export default function BusinessCard({ business }) {
             <p className="businessBody"> {business.name}</p>
             <p className="businessBody mt-4">{business.jobDescription}</p>
           </div>
-          <div className="w-1/4 text-center ">
+          <div className="w-1/4 text-center relative  h-full">
             {business?.logo?.secure_url && (
               <Image
-                className="rounded-t-lg"
+                className="rounded-lg"
                 src={business?.logo?.secure_url}
-                width={180}
-                height={100}
                 objectFit="cover"
-                layout="responsive"
+                layout="fill"
               />
             )}
           </div>
