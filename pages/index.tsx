@@ -170,5 +170,6 @@ export const getStaticProps = async () => {
       topPost: JSON.parse(JSON.stringify(topPost)),
       mostRead: JSON.parse(JSON.stringify(mostRead)),
     },
+    revalidate: 50,
   };
 };

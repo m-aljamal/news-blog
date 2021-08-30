@@ -174,6 +174,7 @@ export const getStaticProps = async () => {
       businessType,
       categories,
     },
+    revalidate: 50,
   };
 };
 
