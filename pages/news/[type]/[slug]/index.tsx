@@ -125,6 +125,7 @@ export async function getStaticProps(ctx) {
       post: JSON.parse(JSON.stringify(post)),
       relatedPosts: JSON.parse(JSON.stringify(relatedPosts)),
     },
+    revalidate: 50,
   };
 }
 
