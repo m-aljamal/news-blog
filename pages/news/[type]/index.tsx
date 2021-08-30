@@ -6,6 +6,7 @@ import NavBar from "src/components/navbar";
 import Image from "next/image";
 import LogoNav from "src/components/navbar/LogoNav";
 import PostWithDescription from "src/components/post/PostWithDescription";
+
 import ShowDate from "src/components/layout/ShowDate";
 export default function index({ posts, categories }: ICats) {
   const router = useRouter();
@@ -97,7 +98,7 @@ export async function getStaticPaths() {
     };
   });
   return {
-    fallback: false,
+    fallback: true,
     paths: ids,
   };
 }

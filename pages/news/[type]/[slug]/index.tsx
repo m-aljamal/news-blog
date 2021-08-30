@@ -15,11 +15,10 @@ import Link from "next/link";
 import ShowDate from "src/components/layout/ShowDate";
 
 export default function index({ categories, post, relatedPosts }) {
-  if (!post) {
-    return <p>Loading</p>;
-  }
   const router = useRouter();
-
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
   return (
     <div>
       <Head>
@@ -137,7 +136,7 @@ export async function getStaticPaths() {
     };
   });
   return {
-    fallback: false,
+    fallback: true,
     paths: ids,
   };
 }
