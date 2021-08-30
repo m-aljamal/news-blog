@@ -104,10 +104,16 @@ export default function create({ categories }) {
   );
 }
 
-export async function getServerSideProps(ctx) {
-  // const res = await axios.get("/api/checkAuth");
-  // console.log(res);
-
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  if (session.role !== "ADMINISTRATOR") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
   const categories = await prisma.category.findMany();
   return {
     props: { categories },

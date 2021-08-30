@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getSession } from "next-auth/client";
 import React from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Layout from "src/components/dashboard/layout";
@@ -61,7 +62,16 @@ const HelpCard = ({ data }) => {
     </div>
   );
 };
-export async function getStaticProps() {
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  if (session.role !== "ADMINISTRATOR") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
   const requests = await prisma.businessHelpRequest.findMany({
     where: {
       hasProcessed: false,

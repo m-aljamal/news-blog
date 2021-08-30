@@ -2,6 +2,7 @@ import React from "react";
 import CardStatus from "src/components/dashboard/statistics/CardStatus";
 
 import Sidebar from "src/components/dashboard/layout/Sidebar";
+import { getSession } from "next-auth/client";
 
 export default function Dashboard() {
   return (
@@ -15,8 +16,20 @@ export default function Dashboard() {
           </div>
         </div>
         {/* PageVisitStatus */}
-        
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  if (session.role !== "ADMINISTRATOR") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return { props: {} };
 }

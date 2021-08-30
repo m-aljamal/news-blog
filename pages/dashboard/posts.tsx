@@ -12,6 +12,7 @@ import { TrashIcon } from "@heroicons/react/solid";
 import Model from "src/components/layout/Model";
 import dynamic from "next/dynamic";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { getSession } from "next-auth/client";
 
 const Form = dynamic(() => import("src/components/dashboard/postForm"));
 
@@ -226,7 +227,16 @@ export default function posts({ posts, categories }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  if (session.role !== "ADMINISTRATOR") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
   const categories = await prisma.category.findMany();
 
   const posts = await prisma.post.findMany({

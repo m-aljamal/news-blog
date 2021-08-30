@@ -4,6 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import useSWR, { trigger } from "swr";
 import toast, { Toaster } from "react-hot-toast";
+import { getSession } from "next-auth/client";
 export default function AddProfessionRequest({ reqests }) {
   const API = "/api/profession/requests/addprofession";
   const { data, error } = useSWR(API, {
@@ -88,7 +89,16 @@ const ReqCard = ({ text, icon }) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+  if (session.role !== "ADMINISTRATOR") {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
   const reqests = await prisma.business.findMany({
     where: {
       approved: false,
