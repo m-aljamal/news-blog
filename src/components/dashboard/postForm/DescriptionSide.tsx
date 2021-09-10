@@ -34,11 +34,18 @@ const DescriptionSide = ({
             />
           ))}
         </div>
-        <input
-          placeholder="سياسة"
-          className="border w-full outline p-2 text-gray-500"
-          onChange={(e) => setChosenCategory(e.target.value)}
-        />
+        <div className="md:flex gap-2">
+          <input
+            placeholder="سياسة"
+            className="border w-full outline p-2 text-gray-500"
+            onChange={(e) => setChosenCategory(e.target.value)}
+          />
+          <input
+            placeholder="الاسم في الرابط"
+            className="border w-full outline p-2 text-gray-500"
+            {...register("slugName")}
+          />
+        </div>
       </div>
 
       <div className="mt-2">

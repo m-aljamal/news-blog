@@ -10,11 +10,12 @@ import PostWithDescription from "src/components/post/PostWithDescription";
 import ShowDate from "src/components/layout/ShowDate";
 export default function index({ posts, categories }: ICats) {
   const router = useRouter();
-
   if (router.isFallback) {
     return <p>Loading...</p>;
   }
   const { type } = router.query;
+  const title = categories.find((c) => c.slugName === type);
+
   const firstPost = posts?.[0];
   const threePosts = posts?.slice(1, 4);
   const restOfPosts = posts?.slice(4);
@@ -25,7 +26,7 @@ export default function index({ posts, categories }: ICats) {
       <NavBar categories={categories} />
       <div className="bg-gray-100 py-10">
         <div className="container  ">
-          <h2 className="text-gray-800 text-2xl">{type}</h2>
+          <h2 className="text-gray-800 text-2xl">{title?.name}</h2>
           <div className="lg:flex justify-around gap-6 mt-8">
             <div className="lg:w-1/2 bg-white rounded-lg shadow-lg mb-4">
               <Link href={link}>

@@ -7,7 +7,7 @@ export default function index({ categories }: INav) {
         <div className="flex gap-10">
           {categories?.map((cat) => (
             <div key={cat.name}>
-              <Link href={`/news/${cat.name}`}>
+              <Link href={`/news/${cat.slugName}`}>
                 <a>{cat.name}</a>
               </Link>
             </div>

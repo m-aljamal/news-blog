@@ -19,18 +19,19 @@ handler.post(async (req, res) => {
       block,
       mostRead,
       important,
+      slugName,
     } = req.body;
     const findCategory = await prisma.category.findMany({
       where: {
-        name: categoryName,
+        slugName: categoryName,
       },
     });
 
     if (!findCategory.length) {
       let newCategory = await prisma.category.create({
-        data: { name: categoryName },
+        data: { name: categoryName, slugName },
       });
-      categoryName = newCategory.name;
+      categoryName = newCategory.slugName;
     }
 
     const savedPost = await prisma.post.create({

@@ -51,7 +51,7 @@ model Post {
   image        Json
   description  String
   slug         String   @unique
-  category     Category @relation(fields: [categoryName], references: [name])
+  category     Category @relation(fields: [categoryName], references: [slugName])
   categoryName String
   topNews      Boolean  @default(false)
   block        Block?
@@ -64,9 +64,10 @@ model Post {
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  posts Post[]
+  id       Int    @id @default(autoincrement())
+  name     String @unique
+  slugName String @unique
+  posts    Post[]
 
   @@map("categories")
 }

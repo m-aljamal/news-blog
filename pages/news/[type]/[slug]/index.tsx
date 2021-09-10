@@ -19,6 +19,8 @@ export default function index({ categories, post, relatedPosts }) {
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
+  const newsSection = categories.find((c) => c.slugName === router.query.type);
+
   return (
     <div>
       <Head>
@@ -38,7 +40,7 @@ export default function index({ categories, post, relatedPosts }) {
         <div className="container">
           <Link href={`/news/${router.query.type}`}>
             <a className="text-gray-500 text-xl hover:underline cursor-pointer">
-              {router.query.type}
+              {newsSection.name}
             </a>
           </Link>
           <div className="md:flex md:gap-8 mt-8">

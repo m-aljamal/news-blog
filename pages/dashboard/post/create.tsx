@@ -14,7 +14,7 @@ export const validationSchema = yup.object().shape({
   categoryName: yup.string().required("الرجاء اختيار تصنيف البوست"),
   description: yup.string().required("الرجاء كتابة شرح مختصر 25 كلمة"),
   slug: yup.string().required("الرجاء كتابة رابط للبوست"),
-  // image: yup.object().required("الرجاء اختيار صورة للبوست"),
+  image: yup.object().required("الرجاء اختيار صورة للبوست"),
 });
 
 export interface IFormData {
@@ -23,12 +23,15 @@ export interface IFormData {
   description: string;
   slug: string;
   categoryName: string;
+  slugName: string;
   topNews: boolean;
   mostRead: boolean;
   important: boolean;
 }
 
 export default function create({ categories }) {
+  console.log(categories);
+
   const [ChosenCategory, setChosenCategory] = useState("");
   const [typeOfPost, setTypeOfPost] = useState("");
   const [loading, setLoading] = useState(false);
@@ -48,10 +51,17 @@ export default function create({ categories }) {
     resolver: yupResolver(validationSchema),
   });
   const editor = useRef(null);
-  setValue("categoryName", ChosenCategory);
+  const chosCat = categories.find((cat) => cat.name === ChosenCategory);
+  if (chosCat) {
+    setValue("categoryName", chosCat?.slugName);
+  } else {
+    setValue("categoryName", ChosenCategory);
+  }
   setValue("image", previewImage);
 
   const onSubmit = async (data: IFormData, e) => {
+    console.log(data);
+
     setLoading(true);
 
     let block;
@@ -59,7 +69,7 @@ export default function create({ categories }) {
       block = await editor.current.save();
     }
     try {
-      const res = await axios.post("/api/posts/create", {
+      await axios.post("/api/posts/create", {
         ...data,
         block,
         [`${typeOfPost}`]: true,
@@ -98,6 +108,7 @@ export default function create({ categories }) {
         typeOfPost={typeOfPost}
         setTypeOfPost={setTypeOfPost}
         editor={editor}
+        loading={loading}
       />
     </Layout>
   );

@@ -16,6 +16,7 @@ export interface ICats {
 
 interface ICategory {
   name: string;
+  slugName: string;
   id: number;
   posts: IPost[];
 }
@@ -132,6 +133,7 @@ export const getStaticProps = async () => {
         },
       },
       name: true,
+      slugName: true,
     },
   });
   const topPost = await prisma.post.findFirst({
@@ -170,6 +172,6 @@ export const getStaticProps = async () => {
       topPost: JSON.parse(JSON.stringify(topPost)),
       mostRead: JSON.parse(JSON.stringify(mostRead)),
     },
-    revalidate: 50,
+    revalidate: 20,
   };
 };

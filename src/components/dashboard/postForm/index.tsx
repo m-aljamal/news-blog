@@ -4,6 +4,7 @@ import DescriptionSide from "./DescriptionSide";
 import EditorSide from "./EditorSide";
 import { CheckIcon } from "@heroicons/react/solid";
 import ErrorMessageForm from "../layout/ErrorMessageForm";
+import SvgLoading from "src/components/layout/SvgLoading";
 
 export default function index({
   register,
@@ -64,11 +65,22 @@ export default function index({
 
       <div className=" sticky z-20   bottom-0 left-0 right-0 border-t px-4 bg-white ">
         <div className="my-2 flex justify-between items-center  ">
-          <div className="border   cursor-pointer rounded-md bg-green-500 text-white">
-            <button type="submit" className="px-4 py-2 ">
+          <div
+            className={`border px-8 cursor-pointer rounded-md ${
+              props.loading
+                ? "bg-gray-500 opacity-50"
+                : "bg-green-500 opacity-100"
+            }  text-white relative `}
+          >
+            <button
+              type="submit"
+              className="px-4 py-2 "
+              disabled={props.loading}
+            >
               نشر
             </button>
-            <CheckIcon className="h-5 w-5 inline-block" />
+            <CheckIcon className="h-5 w-5 inline-block " />
+            {props.loading && <SvgLoading style="top-2  " />}
           </div>
         </div>
       </div>

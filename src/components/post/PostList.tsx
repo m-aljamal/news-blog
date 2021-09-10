@@ -4,7 +4,7 @@ export default function PostList({ postList }) {
   if (!postList.posts.length) return <div></div>;
   return (
     <div className="container mt-4">
-      <Link href={`/news/${postList.name}`}>
+      <Link href={`/news/${postList.slugName}`}>
         <h2 className="cursor-pointer text-gray-500 text-xl">
           {postList.name}
         </h2>

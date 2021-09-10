@@ -18,12 +18,13 @@ CREATE TABLE "Business" (
     "jobDescription" TEXT NOT NULL,
     "logo" JSONB NOT NULL,
     "businessStart" TEXT NOT NULL,
-    "NumberOfEmployees" TEXT NOT NULL,
+    "NumberOfEmployees" INTEGER NOT NULL,
     "faceBook" TEXT NOT NULL,
     "instagram" TEXT NOT NULL,
     "youtube" TEXT NOT NULL,
     "whatsAppNumber" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "approved" BOOLEAN NOT NULL DEFAULT false,
 
     PRIMARY KEY ("id")
 );
@@ -63,6 +64,7 @@ CREATE TABLE "posts" (
 CREATE TABLE "categories" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "slugName" TEXT NOT NULL,
 
     PRIMARY KEY ("id")
 );
@@ -133,11 +135,25 @@ CREATE TABLE "VerificationRequest" (
     PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "BusinessHelpRequest" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "whatsAppNumber" TEXT NOT NULL,
+    "hasProcessed" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "posts.slug_unique" ON "posts"("slug");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "categories.name_unique" ON "categories"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "categories.slugName_unique" ON "categories"("slugName");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Block_postId_unique" ON "Block"("postId");
@@ -164,7 +180,7 @@ CREATE UNIQUE INDEX "VerificationRequest.identifier_token_unique" ON "Verificati
 ALTER TABLE "Review" ADD FOREIGN KEY ("businessId") REFERENCES "Business"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "posts" ADD FOREIGN KEY ("categoryName") REFERENCES "categories"("name") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "posts" ADD FOREIGN KEY ("categoryName") REFERENCES "categories"("slugName") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Block" ADD FOREIGN KEY ("postId") REFERENCES "posts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
