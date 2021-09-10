@@ -64,18 +64,17 @@ export default function create({ categories }) {
         block,
         [`${typeOfPost}`]: true,
       });
-      if (res.statusText === "OK") {
-        setLoading(false);
-        toast.success("تم النشر بنجاح!");
-        e.target.reset();
-        setTypeOfPost("");
-        setPreviewImage({
-          secure_url: "",
-          public_id: "",
-        });
-        setChosenCategory("");
-        await editor.current.clear();
-      }
+
+      setLoading(false);
+      toast.success("تم النشر بنجاح!");
+      e.target.reset();
+      setTypeOfPost("");
+      setPreviewImage({
+        secure_url: "",
+        public_id: "",
+      });
+      setChosenCategory("");
+      await editor.current.clear();
     } catch (error) {
       console.log(error.response);
       toast.error("خطأ لم يتم النشر", error.response);
